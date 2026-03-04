@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
 
-// ─── Types ───────────────────────────────────────────────
 interface Course {
   id: string;
   title: string;
@@ -28,9 +28,9 @@ interface Feature {
   icon?: string;
   title: string;
   desc: string;
+  route?: string;
 }
 
-// ─── Mock Data ───────────────────────────────────────────
 const FEATURED_COURSES: Course[] = [
   {
     id: "kurs_b7463c4ad78235aa",
@@ -73,6 +73,7 @@ const FEATURES: Feature[] = [
     icon: "🤝",
     title: "Topluluk Desteği",
     desc: "Türkiye'deki FIRST takımlarıyla bağlan",
+    route: "/(tabs)/teams",
   },
 ];
 
@@ -82,41 +83,20 @@ const CourseCard: React.FC<{ course: Course; index: number }> = ({ course, index
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        delay: index * 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 500,
-        delay: index * 150,
-        useNativeDriver: true,
-      }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 500, delay: index * 150, useNativeDriver: true }),
+      Animated.timing(slideAnim, { toValue: 0, duration: 500, delay: index * 150, useNativeDriver: true }),
     ]).start();
   }, []);
 
   return (
-    <Animated.View
-      style={[
-        styles.courseCard,
-        { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-      ]}
-    >
+    <Animated.View style={[styles.courseCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
       <TouchableOpacity activeOpacity={0.85}>
-        <Image
-          source={{ uri: course.cover }}
-          style={styles.courseImage}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: course.cover }} style={styles.courseImage} resizeMode="cover" />
         <View style={styles.courseBadge}>
           <Text style={styles.courseBadgeText}>{course.category}</Text>
         </View>
         <View style={styles.courseInfo}>
-          <Text style={styles.courseTitle} numberOfLines={2}>
-            {course.title}
-          </Text>
+          <Text style={styles.courseTitle} numberOfLines={2}>{course.title}</Text>
           <View style={styles.courseFooter}>
             <Text style={styles.courseTeam}>⚡ {course.team}</Text>
             <View style={styles.levelPill}>
@@ -129,61 +109,42 @@ const CourseCard: React.FC<{ course: Course; index: number }> = ({ course, index
   );
 };
 
-// ─── Feature Card ─────────────────────────────────────────
-const FeatureCard: React.FC<{ feature: Feature; index: number }> = ({ feature, index }) => {
+const FeatureCard: React.FC<{ feature: Feature; index: number; onPress?: () => void }> = ({ feature, index, onPress }) => {
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        delay: 300 + index * 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        delay: 300 + index * 100,
-        useNativeDriver: true,
-      }),
+      Animated.spring(scaleAnim, { toValue: 1, delay: 300 + index * 100, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 400, delay: 300 + index * 100, useNativeDriver: true }),
     ]).start();
   }, []);
 
   return (
-    <Animated.View
-      style={[
-        styles.featureCard,
-        { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
-      ]}
-    >
-      {feature.image ? (
-        <Image source={feature.image} style={styles.featureIconImage} />
-      ) : (
-        <Text style={styles.featureIcon}>{feature.icon}</Text>
-      )}
-      <Text style={styles.featureTitle}>{feature.title}</Text>
-      <Text style={styles.featureDesc}>{feature.desc}</Text>
-    </Animated.View>
+    <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.7 : 1} style={{ flex: 1 }}>
+      <Animated.View style={[styles.featureCard, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }, onPress && styles.featureCardClickable]}>
+        {feature.image ? (
+          <Image source={feature.image} style={styles.featureIconImage} />
+        ) : (
+          <Text style={styles.featureIcon}>{feature.icon}</Text>
+        )}
+        <Text style={styles.featureTitle}>{feature.title}</Text>
+        <Text style={styles.featureDesc}>{feature.desc}</Text>
+        {onPress && <Text style={styles.featureArrow}>→</Text>}
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 
 const HomeScreen: React.FC = () => {
   const heroAnim = useRef(new Animated.Value(0)).current;
   const heroSlide = useRef(new Animated.Value(-20)).current;
+  const router = useRouter();
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(heroAnim, {
-        toValue: 1,
-        duration: 700,
-        useNativeDriver: true,
-      }),
-      Animated.timing(heroSlide, {
-        toValue: 0,
-        duration: 700,
-        useNativeDriver: true,
-      }),
+      Animated.timing(heroAnim, { toValue: 1, duration: 700, useNativeDriver: true }),
+      Animated.timing(heroSlide, { toValue: 0, duration: 700, useNativeDriver: true }),
     ]).start();
   }, []);
 
@@ -195,15 +156,11 @@ const HomeScreen: React.FC = () => {
         {/* ── Hero ── */}
         <View style={styles.hero}>
           <View style={styles.heroGlow} />
-          <Animated.View
-            style={{ opacity: heroAnim, transform: [{ translateY: heroSlide }] }}
-          >
+          <Animated.View style={{ opacity: heroAnim, transform: [{ translateY: heroSlide }] }}>
             <Text style={styles.heroTag}>ROOKIEVERSE</Text>
             <Text style={styles.heroTitle}>FIRST{"\n"}Dünyasına{"\n"}Hoş Geldin</Text>
             <Text style={styles.heroSub}>
-              FIRST takımlarının tecrübesiyle hazırlanan; sıfırdan zirveye giden yolda Rookie üyeler ve takımların ihtiyaç duyduğu tüm kaynaklar artık tek çatı altında
-              
-Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik serüveninize güçlü bir başlangıç yapın.
+              FIRST takımlarının tecrübesiyle hazırlanan; sıfırdan zirveye giden yolda Rookie üyeler ve takımların ihtiyaç duyduğu tüm kaynaklar artık tek çatı altında{"\n\n"}Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik serüveninize güçlü bir başlangıç yapın.
             </Text>
             <View style={styles.heroBtns}>
               <TouchableOpacity style={styles.btnPrimary} activeOpacity={0.8}>
@@ -222,7 +179,12 @@ Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik ser�
           <Text style={styles.sectionTitle}>Her şey burada</Text>
           <View style={styles.featuresRow}>
             {FEATURES.map((f, i) => (
-              <FeatureCard key={i} feature={f} index={i} />
+              <FeatureCard
+                key={i}
+                feature={f}
+                index={i}
+                onPress={f.route ? () => router.push(f.route as any) : undefined}
+              />
             ))}
           </View>
         </View>
@@ -238,11 +200,7 @@ Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik ser�
               <Text style={styles.seeAllText}>Tümünü Gör</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.coursesScroll}
-          >
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.coursesScroll}>
             {FEATURED_COURSES.map((course, i) => (
               <CourseCard key={course.id} course={course} index={i} />
             ))}
@@ -260,26 +218,13 @@ Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik ser�
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
+  container: { flex: 1, backgroundColor: "#ffffff" },
 
-  hero: {
-    paddingHorizontal: 24,
-    paddingTop: 64,
-    paddingBottom: 48,
-    overflow: "hidden",
-  },
+  hero: { paddingHorizontal: 24, paddingTop: 64, paddingBottom: 48, overflow: "hidden" },
   heroGlow: {
-    position: "absolute",
-    top: 0,
-    right: -60,
-    width: 280,
-    height: 280,
-    borderRadius: 140,
-    backgroundColor: "#FFD600",
-    opacity: 0.12,
+    position: "absolute", top: 0, right: -60,
+    width: 280, height: 280, borderRadius: 140,
+    backgroundColor: "#FFD600", opacity: 0.12,
   },
   heroTag: {
     color: "#FFD600",
@@ -290,244 +235,45 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textTransform: "uppercase",
   },
-  heroTitle: {
-    fontSize: 48,
-    fontWeight: "900",
-    color: "#111111",
-    lineHeight: 52,
-    letterSpacing: -1,
-    marginBottom: 16,
-  },
-  heroSub: {
-    fontSize: 16,
-    color: "#555555",
-    lineHeight: 24,
-    marginBottom: 32,
-    maxWidth: 300,
-  },
-  heroBtns: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  btnPrimary: {
-    backgroundColor: "#FFD600",
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 12,
-  },
-  btnPrimaryText: {
-    color: "#0a0a0f",
-    fontWeight: "800",
-    fontSize: 15,
-  },
-  btnSecondary: {
-    borderWidth: 1.5,
-    borderColor: "#333",
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderRadius: 12,
-  },
-  btnSecondaryText: {
-    color: "#444444",
-    fontWeight: "700",
-    fontSize: 15,
-  },
+  heroTitle: { fontSize: 48, fontWeight: "900", color: "#111111", lineHeight: 52, letterSpacing: -1, marginBottom: 16 },
+  heroSub: { fontSize: 16, color: "#555555", lineHeight: 24, marginBottom: 32, maxWidth: 300 },
+  heroBtns: { flexDirection: "row", gap: 12 },
+  btnPrimary: { backgroundColor: "#FFD600", paddingHorizontal: 24, paddingVertical: 14, borderRadius: 12 },
+  btnPrimaryText: { color: "#0a0a0f", fontWeight: "800", fontSize: 15 },
+  btnSecondary: { borderWidth: 1.5, borderColor: "#333", paddingHorizontal: 20, paddingVertical: 14, borderRadius: 12 },
+  btnSecondaryText: { color: "#444444", fontWeight: "700", fontSize: 15 },
 
-  section: {
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginBottom: 20,
-  },
-  sectionLabel: {
-    color: "#FFD600",
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    color: "#111111",
-    fontSize: 24,
-    fontWeight: "800",
-    letterSpacing: -0.5,
-  },
-  seeAll: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: "#eeeeee",
-  },
-  seeAllText: {
-    color: "#FFD600",
-    fontSize: 13,
-    fontWeight: "700",
-  },
+  section: { paddingHorizontal: 24, paddingVertical: 32 },
+  sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 20 },
+  sectionLabel: { color: "#FFD600", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
+  sectionTitle: { color: "#111111", fontSize: 24, fontWeight: "800", letterSpacing: -0.5 },
+  seeAll: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: "#eeeeee" },
+  seeAllText: { color: "#FFD600", fontSize: 13, fontWeight: "700" },
 
-  featuresRow: {
-    flexDirection: "row",
-    gap: 12,
-    marginTop: 16,
-  },
-  featureCard: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-  },
-  featureIconImage: {
-    width: 40,
-    height: 40,
-    marginBottom: 8,
-    resizeMode: "contain",
-  },
-  featureIcon: {
-    fontSize: 28,
-    marginBottom: 8,
-  },
-  featureTitle: {
-    color: "#111111",
-    fontSize: 13,
-    fontWeight: "800",
-    marginBottom: 6,
-  },
-  featureDesc: {
-    color: "#777777",
-    fontSize: 11,
-    lineHeight: 16,
-  },
+  featuresRow: { flexDirection: "row", gap: 12, marginTop: 16 },
+  featureCard: { flex: 1, backgroundColor: "#f5f5f5", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "#e0e0e0" },
+  featureCardClickable: { borderColor: "#FFD600" },
+  featureIconImage: { width: 40, height: 40, marginBottom: 8, resizeMode: "contain" },
+  featureIcon: { fontSize: 28, marginBottom: 8 },
+  featureTitle: { color: "#111111", fontSize: 13, fontWeight: "800", marginBottom: 6 },
+  featureDesc: { color: "#777777", fontSize: 11, lineHeight: 16 },
+  featureArrow: { color: "#FFD600", fontSize: 16, fontWeight: "800", marginTop: 8 },
 
-  coursesScroll: {
-    paddingRight: 24,
-    gap: 16,
-  },
-  courseCard: {
-    width: width * 0.6,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 16,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-  },
-  courseImage: {
-    width: "100%",
-    height: 130,
-    backgroundColor: "#e0e0e0",
-  },
-  courseBadge: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    backgroundColor: "#FFD600",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  courseBadgeText: {
-    color: "#0a0a0f",
-    fontSize: 11,
-    fontWeight: "800",
-  },
-  courseInfo: {
-    padding: 14,
-  },
-  courseTitle: {
-    color: "#111111",
-    fontSize: 14,
-    fontWeight: "800",
-    lineHeight: 20,
-    marginBottom: 10,
-  },
-  courseFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  courseTeam: {
-    color: "#666666",
-    fontSize: 11,
-    fontWeight: "600",
-  },
-  levelPill: {
-    backgroundColor: "#e0e0e0",
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  levelText: {
-    color: "#444444",
-    fontSize: 10,
-    fontWeight: "700",
-  },
+  coursesScroll: { paddingRight: 24, gap: 16 },
+  courseCard: { width: width * 0.6, backgroundColor: "#f5f5f5", borderRadius: 16, overflow: "hidden", borderWidth: 1, borderColor: "#e0e0e0" },
+  courseImage: { width: "100%", height: 130, backgroundColor: "#e0e0e0" },
+  courseBadge: { position: "absolute", top: 10, left: 10, backgroundColor: "#FFD600", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  courseBadgeText: { color: "#0a0a0f", fontSize: 11, fontWeight: "800" },
+  courseInfo: { padding: 14 },
+  courseTitle: { color: "#111111", fontSize: 14, fontWeight: "800", lineHeight: 20, marginBottom: 10 },
+  courseFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  courseTeam: { color: "#666666", fontSize: 11, fontWeight: "600" },
+  levelPill: { backgroundColor: "#e0e0e0", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  levelText: { color: "#444444", fontSize: 10, fontWeight: "700" },
 
-  cta: {
-    margin: 24,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 24,
-    padding: 28,
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-    overflow: "hidden",
-    alignItems: "center",
-  },
-  ctaGlow: {
-    position: "absolute",
-    bottom: -40,
-    left: "50%",
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: "#FFD600",
-    opacity: 0.1,
-  },
-  ctaTitle: {
-    color: "#111111",
-    fontSize: 26,
-    fontWeight: "900",
-    textAlign: "center",
-    lineHeight: 32,
-    marginBottom: 12,
-  },
-  ctaDesc: {
-    color: "#777777",
-    fontSize: 14,
-    textAlign: "center",
-    lineHeight: 22,
-    marginBottom: 24,
-  },
-  ctaBtn: {
-    backgroundColor: "#FFD600",
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 14,
-  },
-  ctaBtnText: {
-    color: "#0a0a0f",
-    fontWeight: "900",
-    fontSize: 16,
-  },
-
-  footer: {
-    alignItems: "center",
-    paddingVertical: 32,
-    gap: 6,
-  },
-  footerLogo: {
-    color: "#111111",
-    fontSize: 18,
-    fontWeight: "900",
-    letterSpacing: 4,
-  },
-  footerSub: {
-    color: "#999999",
-    fontSize: 12,
-  },
+  footer: { alignItems: "center", paddingVertical: 32, gap: 6 },
+  footerLogo: { color: "#111111", fontSize: 18, fontWeight: "900", letterSpacing: 4 },
+  footerSub: { color: "#999999", fontSize: 12 },
 });
 
 export default HomeScreen;

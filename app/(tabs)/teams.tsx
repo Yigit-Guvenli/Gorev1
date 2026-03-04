@@ -1,0 +1,246 @@
+import { useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+interface Team {
+  number: string;
+  name: string;
+  logo: string;
+}
+
+const TEAMS: Team[] = [
+  { number: "4972", name: "Borusan Robotics", logo: "https://www.rookieverse.net/uploads/team_10/logo_1767641761_5325daf9.png" },
+  { number: "6228", name: "Mat Robotics", logo: "https://www.rookieverse.net/uploads/team_6/logo_1759600232_2db59518.png" },
+  { number: "6232", name: "FLORYA BISONS", logo: "https://www.rookieverse.net/uploads/team_7/logo_1761204118_f05d27fa.jpg" },
+  { number: "6402", name: "Göktürkler", logo: "https://www.rookieverse.net/uploads/team_13/logo_1769350917_0e4b95ab.jpg" },
+  { number: "6430", name: "Kalsedon", logo: "https://www.rookieverse.net/uploads/team_8/logo_1761852879_c26ed027.jpg" },
+  { number: "6948", name: "Eagles", logo: "https://www.rookieverse.net/uploads/team_12/logo_1769350845_1e5c443c.jpg" },
+  { number: "6985", name: "EnkaTech", logo: "https://www.rookieverse.net/uploads/team_9/logo_1762029922_fb7caad3.jpg" },
+  { number: "7086", name: "Iorobot", logo: "https://www.rookieverse.net/uploads/team_14/logo_1769440070_49ffc47e.jpg" },
+  { number: "7439", name: "Qubit", logo: "https://www.rookieverse.net/uploads/team_16/logo_1769605766_b8730791.jpg" },
+  { number: "7742", name: "Cosmos Robot Works", logo: "https://www.rookieverse.net/uploads/team_15/logo_1769605611_867aee15.jpg" },
+  { number: "8557", name: "Conquera", logo: "https://www.rookieverse.net/uploads/team_11/logo_1768243376_f29e38a2.jpg" },
+  { number: "11371", name: "Odyssey", logo: "https://www.rookieverse.net/uploads/team_18/logo_1770490468_9feede33.jpg" },
+];
+
+const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, { toValue: 1, duration: 400, delay: index * 60, useNativeDriver: true }),
+      Animated.timing(slideAnim, { toValue: 0, duration: 400, delay: index * 60, useNativeDriver: true }),
+    ]).start();
+  }, []);
+
+  return (
+    <Animated.View style={[styles.teamCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
+      <TouchableOpacity style={styles.teamCardInner} activeOpacity={0.8}>
+        <Image source={{ uri: team.logo }} style={styles.teamLogo} resizeMode="contain" />
+        <View style={styles.teamInfo}>
+          <Text style={styles.teamName}>{team.name}</Text>
+          <View style={styles.teamNumberBadge}>
+            <Text style={styles.teamNumber}>#{team.number}</Text>
+          </View>
+        </View>
+        <Text style={styles.teamArrow}>›</Text>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
+const TeamsScreen: React.FC = () => {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const headerAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(headerAnim, { toValue: 1, duration: 600, useNativeDriver: true }).start();
+  }, []);
+
+  const filtered = TEAMS.filter(
+    (t) =>
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.number.includes(search)
+  );
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+
+      {/* ── Header ── */}
+      <Animated.View style={[styles.header, { opacity: headerAnim }]}>
+        <TouchableOpacity onPress={() => router.push("/(tabs)")} style={styles.backBtn}>
+          <Text style={styles.backBtnText}>← Geri</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerLabel}>TOPLULUK</Text>
+        <Text style={styles.headerTitle}>Takımlar</Text>
+        <Text style={styles.headerSub}>{TEAMS.length} takım listeleniyor</Text>
+      </Animated.View>
+
+      {/* ── Arama ── */}
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchIcon}>🔍</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Takım adı veya numara ara..."
+          placeholderTextColor="#aaa"
+          value={search}
+          onChangeText={setSearch}
+        />
+        {search.length > 0 && (
+          <TouchableOpacity onPress={() => setSearch("")}>
+            <Text style={styles.clearBtn}>✕</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* ── Liste ── */}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
+        {filtered.length === 0 ? (
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>Takım bulunamadı</Text>
+          </View>
+        ) : (
+          filtered.map((team, i) => (
+            <TeamCard key={team.number} team={team} index={i} />
+          ))
+        )}
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#ffffff" },
+
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 64,
+    paddingBottom: 20,
+  },
+  headerLabel: {
+    color: "#FFD600",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 2,
+    marginBottom: 4,
+  },
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: "#111111",
+    letterSpacing: -1,
+    marginBottom: 4,
+  },
+  backBtn: {
+    marginBottom: 12,
+  },
+  backBtnText: {
+    color: "#111111",
+    fontSize: 16,
+    fontWeight: "800",
+  },
+  headerSub: {
+    fontSize: 14,
+    color: "#999",
+  },
+
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 24,
+    marginBottom: 16,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+  },
+  searchIcon: { fontSize: 16, marginRight: 8 },
+  searchInput: {
+    flex: 1,
+    fontSize: 15,
+    color: "#111",
+  },
+  clearBtn: {
+    fontSize: 14,
+    color: "#aaa",
+    paddingLeft: 8,
+  },
+
+  list: {
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+    gap: 12,
+  },
+
+  teamCard: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    overflow: "hidden",
+  },
+  teamCardInner: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 14,
+    gap: 14,
+  },
+  teamLogo: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    backgroundColor: "#fff",
+  },
+  teamInfo: {
+    flex: 1,
+    gap: 6,
+  },
+  teamName: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#111111",
+  },
+  teamNumberBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#FFD600",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  teamNumber: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#0a0a0f",
+  },
+  teamArrow: {
+    fontSize: 24,
+    color: "#ccc",
+    fontWeight: "300",
+  },
+
+  empty: {
+    alignItems: "center",
+    paddingTop: 60,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#aaa",
+  },
+});
+
+export default TeamsScreen;
