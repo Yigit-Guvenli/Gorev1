@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -11,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useRouter } from "expo-router";
 
 interface Team {
   number: string;
@@ -61,9 +61,9 @@ const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
 };
 
 const TeamsScreen: React.FC = () => {
-  const router = useRouter();
   const [search, setSearch] = useState("");
   const headerAnim = useRef(new Animated.Value(0)).current;
+  const router = useRouter();
 
   useEffect(() => {
     Animated.timing(headerAnim, { toValue: 1, duration: 600, useNativeDriver: true }).start();
@@ -77,9 +77,8 @@ const TeamsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fdfaf2" />
 
-      {/* ── Header ── */}
       <Animated.View style={[styles.header, { opacity: headerAnim }]}>
         <TouchableOpacity onPress={() => router.push("/(tabs)")} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← Geri</Text>
@@ -89,13 +88,12 @@ const TeamsScreen: React.FC = () => {
         <Text style={styles.headerSub}>{TEAMS.length} takım listeleniyor</Text>
       </Animated.View>
 
-      {/* ── Arama ── */}
       <View style={styles.searchContainer}>
         <Text style={styles.searchIcon}>🔍</Text>
         <TextInput
           style={styles.searchInput}
           placeholder="Takım adı veya numara ara..."
-          placeholderTextColor="#aaa"
+          placeholderTextColor="#9ca3af"
           value={search}
           onChangeText={setSearch}
         />
@@ -106,7 +104,6 @@ const TeamsScreen: React.FC = () => {
         )}
       </View>
 
-      {/* ── Liste ── */}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
         {filtered.length === 0 ? (
           <View style={styles.empty}>
@@ -123,63 +120,34 @@ const TeamsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  container: { flex: 1, backgroundColor: "#fdfaf2" },
 
   header: {
     paddingHorizontal: 24,
     paddingTop: 64,
     paddingBottom: 20,
   },
-  headerLabel: {
-    color: "#FFD600",
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "900",
-    color: "#111111",
-    letterSpacing: -1,
-    marginBottom: 4,
-  },
-  backBtn: {
-    marginBottom: 12,
-  },
-  backBtnText: {
-    color: "#111111",
-    fontSize: 16,
-    fontWeight: "800",
-  },
-  headerSub: {
-    fontSize: 14,
-    color: "#999",
-  },
+  backBtn: { marginBottom: 12 },
+  backBtnText: { color: "#111827", fontSize: 16, fontWeight: "800" },
+  headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
+  headerTitle: { fontSize: 32, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 4 },
+  headerSub: { fontSize: 14, color: "#9ca3af" },
 
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 24,
     marginBottom: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f0e0",
     borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: "#e8e0c8",
   },
   searchIcon: { fontSize: 16, marginRight: 8 },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: "#111",
-  },
-  clearBtn: {
-    fontSize: 14,
-    color: "#aaa",
-    paddingLeft: 8,
-  },
+  searchInput: { flex: 1, fontSize: 15, color: "#111827" },
+  clearBtn: { fontSize: 14, color: "#9ca3af", paddingLeft: 8 },
 
   list: {
     paddingHorizontal: 24,
@@ -188,10 +156,10 @@ const styles = StyleSheet.create({
   },
 
   teamCard: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f0e0",
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: "#e8e0c8",
     overflow: "hidden",
   },
   teamCardInner: {
@@ -204,43 +172,22 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#fdfaf2",
   },
-  teamInfo: {
-    flex: 1,
-    gap: 6,
-  },
-  teamName: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: "#111111",
-  },
+  teamInfo: { flex: 1, gap: 6 },
+  teamName: { fontSize: 16, fontWeight: "800", color: "#111827" },
   teamNumberBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#FFD600",
+    backgroundColor: "#e5ae32",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
   },
-  teamNumber: {
-    fontSize: 11,
-    fontWeight: "800",
-    color: "#0a0a0f",
-  },
-  teamArrow: {
-    fontSize: 24,
-    color: "#ccc",
-    fontWeight: "300",
-  },
+  teamNumber: { fontSize: 11, fontWeight: "800", color: "#111827" },
+  teamArrow: { fontSize: 24, color: "#9ca3af", fontWeight: "300" },
 
-  empty: {
-    alignItems: "center",
-    paddingTop: 60,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: "#aaa",
-  },
+  empty: { alignItems: "center", paddingTop: 60 },
+  emptyText: { fontSize: 16, color: "#9ca3af" },
 });
 
 export default TeamsScreen;

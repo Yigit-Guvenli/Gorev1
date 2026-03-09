@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {
   Animated,
@@ -10,7 +11,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
 
@@ -63,11 +63,13 @@ const FEATURES: Feature[] = [
     icon: "📚",
     title: "Kapsamlı Kurslar",
     desc: "FRC, FTC, FLL için başlangıçtan ileri seviyeye içerikler",
+    route: "/(tabs)/cour",
   },
   {
     icon: "🎮",
     title: "İnteraktif Oyunlar",
     desc: "Öğrendiklerini eğlenceli oyunlarla pekiştir",
+    route: "/(tabs)/games",
   },
   {
     icon: "🤝",
@@ -150,30 +152,30 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fdfaf2" />
       <ScrollView showsVerticalScrollIndicator={false} bounces={true}>
 
-        {/* ── Hero ── */}
         <View style={styles.hero}>
           <View style={styles.heroGlow} />
           <Animated.View style={{ opacity: heroAnim, transform: [{ translateY: heroSlide }] }}>
             <Text style={styles.heroTag}>ROOKIEVERSE</Text>
-            <Text style={styles.heroTitle}>FIRST{"\n"}Dünyasına{"\n"}Hoş Geldin</Text>
+            <Text style={styles.heroTitle}>
+              {"FIRST\nDünyasına\n"}<Text style={{ color: "#e5ae32" }}>Hoş Geldin</Text>
+            </Text>
             <Text style={styles.heroSub}>
-              FIRST takımlarının tecrübesiyle hazırlanan; sıfırdan zirveye giden yolda Rookie üyeler ve takımların ihtiyaç duyduğu tüm kaynaklar artık tek çatı altında{"\n\n"}Rookie üyeler, ihtiyacınız olan kaynaklara zahmetsizce ulaşarak robotik serüveninize güçlü bir başlangıç yapın.
+              FIRST takımlarının tecrübesiyle hazırlanan; sıfırdan zirveye giden yolda Rookie üyeler ve takımların ihtiyaç duyduğu tüm kaynaklar artık tek çatı altında.
             </Text>
             <View style={styles.heroBtns}>
-              <TouchableOpacity style={styles.btnPrimary} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.btnPrimary} activeOpacity={0.8} onPress={() => router.push("/(tabs)/courses")}>
                 <Text style={styles.btnPrimaryText}>Kurslara Başla →</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btnSecondary} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.btnSecondary} activeOpacity={0.8} onPress={() => router.push("/(tabs)/games")}>
                 <Text style={styles.btnSecondaryText}>Oyunları Keşfet</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
         </View>
 
-        {/* ── Neden RookieVerse ── */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>NEDEN ROOKIEVERSE?</Text>
           <Text style={styles.sectionTitle}>Her şey burada</Text>
@@ -189,14 +191,13 @@ const HomeScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* ── Öne Çıkan Kurslar ── */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View>
               <Text style={styles.sectionLabel}>KURSLAR</Text>
               <Text style={styles.sectionTitle}>Öne Çıkanlar</Text>
             </View>
-            <TouchableOpacity style={styles.seeAll}>
+            <TouchableOpacity style={styles.seeAll} onPress={() => router.push("/(tabs)/courses")}>
               <Text style={styles.seeAllText}>Tümünü Gör</Text>
             </TouchableOpacity>
           </View>
@@ -218,16 +219,16 @@ const HomeScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  container: { flex: 1, backgroundColor: "#fdfaf2" },
 
   hero: { paddingHorizontal: 24, paddingTop: 64, paddingBottom: 48, overflow: "hidden" },
   heroGlow: {
     position: "absolute", top: 0, right: -60,
     width: 280, height: 280, borderRadius: 140,
-    backgroundColor: "#FFD600", opacity: 0.12,
+    backgroundColor: "#e5ae32", opacity: 0.15,
   },
   heroTag: {
-    color: "#FFD600",
+    color: "#e5ae32",
     fontSize: 32,
     fontWeight: "900",
     fontStyle: "italic",
@@ -235,45 +236,45 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textTransform: "uppercase",
   },
-  heroTitle: { fontSize: 48, fontWeight: "900", color: "#111111", lineHeight: 52, letterSpacing: -1, marginBottom: 16 },
-  heroSub: { fontSize: 16, color: "#555555", lineHeight: 24, marginBottom: 32, maxWidth: 300 },
+  heroTitle: { fontSize: 48, fontWeight: "900", color: "#111827", lineHeight: 52, letterSpacing: -1, marginBottom: 16 },
+  heroSub: { fontSize: 16, color: "#4b5563", lineHeight: 24, marginBottom: 32, maxWidth: 300 },
   heroBtns: { flexDirection: "row", gap: 12 },
-  btnPrimary: { backgroundColor: "#FFD600", paddingHorizontal: 24, paddingVertical: 14, borderRadius: 12 },
-  btnPrimaryText: { color: "#0a0a0f", fontWeight: "800", fontSize: 15 },
-  btnSecondary: { borderWidth: 1.5, borderColor: "#333", paddingHorizontal: 20, paddingVertical: 14, borderRadius: 12 },
-  btnSecondaryText: { color: "#444444", fontWeight: "700", fontSize: 15 },
+  btnPrimary: { backgroundColor: "#e5ae32", paddingHorizontal: 24, paddingVertical: 14, borderRadius: 12 },
+  btnPrimaryText: { color: "#111827", fontWeight: "800", fontSize: 15 },
+  btnSecondary: { borderWidth: 1.5, borderColor: "#111827", paddingHorizontal: 20, paddingVertical: 14, borderRadius: 12 },
+  btnSecondaryText: { color: "#111827", fontWeight: "700", fontSize: 15 },
 
   section: { paddingHorizontal: 24, paddingVertical: 32 },
   sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 20 },
-  sectionLabel: { color: "#FFD600", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
-  sectionTitle: { color: "#111111", fontSize: 24, fontWeight: "800", letterSpacing: -0.5 },
-  seeAll: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: "#eeeeee" },
-  seeAllText: { color: "#FFD600", fontSize: 13, fontWeight: "700" },
+  sectionLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
+  sectionTitle: { color: "#111827", fontSize: 24, fontWeight: "800", letterSpacing: -0.5 },
+  seeAll: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: "#f0ead6" },
+  seeAllText: { color: "#e5ae32", fontSize: 13, fontWeight: "700" },
 
   featuresRow: { flexDirection: "row", gap: 12, marginTop: 16 },
-  featureCard: { flex: 1, backgroundColor: "#f5f5f5", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "#e0e0e0" },
-  featureCardClickable: { borderColor: "#FFD600" },
+  featureCard: { flex: 1, backgroundColor: "#f5f0e0", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "#e8e0c8" },
+  featureCardClickable: { borderColor: "#e5ae32" },
   featureIconImage: { width: 40, height: 40, marginBottom: 8, resizeMode: "contain" },
   featureIcon: { fontSize: 28, marginBottom: 8 },
-  featureTitle: { color: "#111111", fontSize: 13, fontWeight: "800", marginBottom: 6 },
-  featureDesc: { color: "#777777", fontSize: 11, lineHeight: 16 },
-  featureArrow: { color: "#FFD600", fontSize: 16, fontWeight: "800", marginTop: 8 },
+  featureTitle: { color: "#111827", fontSize: 13, fontWeight: "800", marginBottom: 6 },
+  featureDesc: { color: "#6b7280", fontSize: 11, lineHeight: 16 },
+  featureArrow: { color: "#e5ae32", fontSize: 16, fontWeight: "800", marginTop: 8 },
 
   coursesScroll: { paddingRight: 24, gap: 16 },
-  courseCard: { width: width * 0.6, backgroundColor: "#f5f5f5", borderRadius: 16, overflow: "hidden", borderWidth: 1, borderColor: "#e0e0e0" },
-  courseImage: { width: "100%", height: 130, backgroundColor: "#e0e0e0" },
-  courseBadge: { position: "absolute", top: 10, left: 10, backgroundColor: "#FFD600", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-  courseBadgeText: { color: "#0a0a0f", fontSize: 11, fontWeight: "800" },
+  courseCard: { width: width * 0.6, backgroundColor: "#f5f0e0", borderRadius: 16, overflow: "hidden", borderWidth: 1, borderColor: "#e8e0c8" },
+  courseImage: { width: "100%", height: 130, backgroundColor: "#e8e0c8" },
+  courseBadge: { position: "absolute", top: 10, left: 10, backgroundColor: "#e5ae32", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  courseBadgeText: { color: "#111827", fontSize: 11, fontWeight: "800" },
   courseInfo: { padding: 14 },
-  courseTitle: { color: "#111111", fontSize: 14, fontWeight: "800", lineHeight: 20, marginBottom: 10 },
+  courseTitle: { color: "#111827", fontSize: 14, fontWeight: "800", lineHeight: 20, marginBottom: 10 },
   courseFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  courseTeam: { color: "#666666", fontSize: 11, fontWeight: "600" },
-  levelPill: { backgroundColor: "#e0e0e0", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  levelText: { color: "#444444", fontSize: 10, fontWeight: "700" },
+  courseTeam: { color: "#6b7280", fontSize: 11, fontWeight: "600" },
+  levelPill: { backgroundColor: "#e8e0c8", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  levelText: { color: "#4b5563", fontSize: 10, fontWeight: "700" },
 
   footer: { alignItems: "center", paddingVertical: 32, gap: 6 },
-  footerLogo: { color: "#111111", fontSize: 18, fontWeight: "900", letterSpacing: 4 },
-  footerSub: { color: "#999999", fontSize: 12 },
+  footerLogo: { color: "#111827", fontSize: 18, fontWeight: "900", letterSpacing: 4 },
+  footerSub: { color: "#9ca3af", fontSize: 12 },
 });
 
 export default HomeScreen;
