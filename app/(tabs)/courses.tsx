@@ -36,7 +36,16 @@ const COURSES: Course[] = [
     category: "FRC",
     level: "Başlangıç",
     cover: "https://www.rookieverse.net/uploads/covers/course_85_cover_f463cd1204dd5744.png",
-    desc: "SOLIDWORKS ile robot tasarımını sıfırdan öğren.",
+    desc: "Aklınıza gelen bir parçayı tasarlayabilecek, montaj mantığı ile bileşenleri birleştirerek robotunuzu modelleyebileceksiniz.",
+  },
+  {
+    id: "kurs_95e76b707a474466",
+    title: "FRC Takımları İçin Robot Yazılım Eğitimi",
+    team: "Mat Robotics #6228",
+    category: "FRC",
+    level: "Başlangıç",
+    cover: "https://www.rookieverse.net/uploads/covers/course_88_cover_27875cecf54e67dd.jpeg",
+    desc: "FRC takımları için robot yazılımı geliştirme eğitimi.",
   },
   {
     id: "kurs_73b61a371e4eae29",
@@ -45,16 +54,34 @@ const COURSES: Course[] = [
     category: "FRC",
     level: "Başlangıç",
     cover: "https://www.rookieverse.net/uploads/covers/course_82_cover_9fc8db35e94b6113.png",
-    desc: "Fusion 360 ile 3D modelleme ve robot parçası tasarımı.",
+    desc: "Yeni başlayanlara FRC robot tasarımı için gerekli olan Fusion 360 becerilerini kazandırmayı amaçlar.",
   },
   {
     id: "kurs_8a8bd1372a7f0692",
-    title: "Sponsor Bulma Rehberi",
+    title: "FRC Takımları İçin Sponsor Bulma Rehberi",
     team: "Mat Robotics #6228",
     category: "FRC",
     level: "Başlangıç",
     cover: "https://www.rookieverse.net/uploads/covers/course_84_cover_da5b57ec2547bcb6.png",
-    desc: "FRC takımın için sponsor bulmayı öğren.",
+    desc: "Rookielere sponsorluk bulma ve sürdürme sürecini öğretmeyi amaçlar.",
+  },
+  {
+    id: "kurs_1b4c930e5ffa4bfc",
+    title: "Cosmic Science",
+    team: "Cosmos Robot Works #7742",
+    category: "FRC",
+    level: "Başlangıç",
+    cover: "https://www.rookieverse.net/uploads/covers/course_90_cover_ae11997ed7d4b384.png",
+    desc: "Takımların sürdürülebilirlik konusunda bilinç kazanmasını ve bunu PR faaliyetlerine yansıtabilmelerini sağlar.",
+  },
+  {
+    id: "kurs_f61e85b8ce09faa8",
+    title: "FRC Hibe Bulma Süreci Rehberi",
+    team: "Mat Robotics #6228",
+    category: "FRC",
+    level: "Başlangıç",
+    cover: "https://www.rookieverse.net/uploads/covers/course_83_cover_6bebbfe7c3857731.jpg",
+    desc: "FRC takımlarının hibe süreçlerini doğru yönetmek ve gerekli kaynakları etkili şekilde elde edebilmesini sağlar.",
   },
 ];
 
@@ -127,7 +154,9 @@ const CoursesScreen: React.FC = () => {
   }, []);
 
   const filtered = COURSES.filter((c) => {
-    const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) || c.team.toLowerCase().includes(search.toLowerCase());
+    const matchSearch =
+      c.title.toLowerCase().includes(search.toLowerCase()) ||
+      c.team.toLowerCase().includes(search.toLowerCase());
     const matchCat = activeCategory === "Tümü" || c.category === activeCategory;
     const matchLevel = activeLevel === "Tümü" || c.level === activeLevel;
     return matchSearch && matchCat && matchLevel;
@@ -145,22 +174,6 @@ const CoursesScreen: React.FC = () => {
         <Text style={styles.headerTitle}>Kurslar</Text>
         <Text style={styles.headerSub}>{COURSES.length} kurs mevcut</Text>
       </Animated.View>
-
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Kurs veya takım ara..."
-          placeholderTextColor="#9ca3af"
-          value={search}
-          onChangeText={setSearch}
-        />
-        {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch("")}>
-            <Text style={styles.clearBtn}>✕</Text>
-          </TouchableOpacity>
-        )}
-      </View>
 
       <ScrollView
         horizontal
@@ -183,6 +196,22 @@ const CoursesScreen: React.FC = () => {
           <FilterButton key={lvl} label={lvl} active={activeLevel === lvl} onPress={() => setActiveLevel(lvl)} />
         ))}
       </ScrollView>
+
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchIcon}>🔍</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Kurs veya takım ara..."
+          placeholderTextColor="#9ca3af"
+          value={search}
+          onChangeText={setSearch}
+        />
+        {search.length > 0 && (
+          <TouchableOpacity onPress={() => setSearch("")}>
+            <Text style={styles.clearBtn}>✕</Text>
+          </TouchableOpacity>
+        )}
+      </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
         <Text style={styles.resultCount}>{filtered.length} kurs</Text>

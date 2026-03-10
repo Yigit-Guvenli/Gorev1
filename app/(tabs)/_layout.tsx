@@ -11,6 +11,9 @@ export default function TabLayout() {
       <Tabs.Screen name="index" />
       <Tabs.Screen name="explore" />
       <Tabs.Screen name="teams" />
+      <Tabs.Screen name="games" />
+      <Tabs.Screen name="courses" />
+      <Tabs.Screen name="season" />
     </Tabs>
   );
 }

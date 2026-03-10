@@ -61,21 +61,33 @@ const FEATURED_COURSES: Course[] = [
 const FEATURES: Feature[] = [
   {
     icon: "📚",
-    title: "Kapsamlı Kurslar",
+    title: "Kurslar",
     desc: "FRC, FTC, FLL için başlangıçtan ileri seviyeye içerikler",
-    route: "/(tabs)/cour",
+    route: "/(tabs)/courses",
   },
   {
     icon: "🎮",
-    title: "İnteraktif Oyunlar",
+    title: "Oyunlar",
     desc: "Öğrendiklerini eğlenceli oyunlarla pekiştir",
     route: "/(tabs)/games",
   },
   {
     icon: "🤝",
-    title: "Topluluk Desteği",
+    title: "Takımlar",
     desc: "Türkiye'deki FIRST takımlarıyla bağlan",
     route: "/(tabs)/teams",
+  },
+  {
+    icon: "🏆",
+    title: "2026 Sezonu",
+    desc: "İstanbul ve Ankara Regional'ları — Mart & Nisan 2026",
+    route: "/(tabs)/season",
+  },
+  {
+    icon: "📖",
+    title: "FIRST Sözlük",
+    desc: "FIRST programlarında sıkça karşılaşacağınız terimlerin ve kısaltmaların açıklamaları",
+    route: "/(tabs)/season",
   },
 ];
 
@@ -92,7 +104,7 @@ const CourseCard: React.FC<{ course: Course; index: number }> = ({ course, index
 
   return (
     <Animated.View style={[styles.courseCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-      <TouchableOpacity activeOpacity={0.85}>
+      <TouchableOpacity activeOpacity={0.85} onPress={() => {}}>
         <Image source={{ uri: course.cover }} style={styles.courseImage} resizeMode="cover" />
         <View style={styles.courseBadge}>
           <Text style={styles.courseBadgeText}>{course.category}</Text>
@@ -123,7 +135,7 @@ const FeatureCard: React.FC<{ feature: Feature; index: number; onPress?: () => v
   }, []);
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.7 : 1} style={{ flex: 1 }}>
+    <TouchableOpacity onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
       <Animated.View style={[styles.featureCard, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }, onPress && styles.featureCardClickable]}>
         {feature.image ? (
           <Image source={feature.image} style={styles.featureIconImage} />
@@ -132,6 +144,7 @@ const FeatureCard: React.FC<{ feature: Feature; index: number; onPress?: () => v
         )}
         <Text style={styles.featureTitle}>{feature.title}</Text>
         <Text style={styles.featureDesc}>{feature.desc}</Text>
+        <View style={{ flex: 1 }} />
         {onPress && <Text style={styles.featureArrow}>→</Text>}
       </Animated.View>
     </TouchableOpacity>
@@ -179,7 +192,12 @@ const HomeScreen: React.FC = () => {
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>NEDEN ROOKIEVERSE?</Text>
           <Text style={styles.sectionTitle}>Her şey burada</Text>
-          <View style={styles.featuresRow}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.featuresScroll}
+            style={{ marginHorizontal: -24 }}
+          >
             {FEATURES.map((f, i) => (
               <FeatureCard
                 key={i}
@@ -188,7 +206,7 @@ const HomeScreen: React.FC = () => {
                 onPress={f.route ? () => router.push(f.route as any) : undefined}
               />
             ))}
-          </View>
+          </ScrollView>
         </View>
 
         <View style={styles.section}>
@@ -251,14 +269,14 @@ const styles = StyleSheet.create({
   seeAll: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20, backgroundColor: "#f0ead6" },
   seeAllText: { color: "#e5ae32", fontSize: 13, fontWeight: "700" },
 
-  featuresRow: { flexDirection: "row", gap: 12, marginTop: 16 },
-  featureCard: { flex: 1, backgroundColor: "#f5f0e0", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "#e8e0c8" },
+  featuresScroll: { paddingHorizontal: 24, paddingVertical: 16, gap: 12 },
+  featureCard: { width: 150, height: 200, backgroundColor: "#f5f0e0", borderRadius: 16, padding: 16, borderWidth: 1, borderColor: "#e8e0c8", flexDirection: "column" },
   featureCardClickable: { borderColor: "#e5ae32" },
   featureIconImage: { width: 40, height: 40, marginBottom: 8, resizeMode: "contain" },
   featureIcon: { fontSize: 28, marginBottom: 8 },
   featureTitle: { color: "#111827", fontSize: 13, fontWeight: "800", marginBottom: 6 },
   featureDesc: { color: "#6b7280", fontSize: 11, lineHeight: 16 },
-  featureArrow: { color: "#e5ae32", fontSize: 16, fontWeight: "800", marginTop: 8 },
+  featureArrow: { color: "#e5ae32", fontSize: 16, fontWeight: "800" },
 
   coursesScroll: { paddingRight: 24, gap: 16 },
   courseCard: { width: width * 0.6, backgroundColor: "#f5f0e0", borderRadius: 16, overflow: "hidden", borderWidth: 1, borderColor: "#e8e0c8" },
