@@ -87,7 +87,7 @@ const FEATURES: Feature[] = [
     icon: "📖",
     title: "FIRST Sözlük",
     desc: "FIRST programlarında sıkça karşılaşacağınız terimlerin ve kısaltmaların açıklamaları",
-    route: "/(tabs)/season",
+    route: "/(tabs)/dictionary",
   },
 ];
 

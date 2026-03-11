@@ -1,7 +1,10 @@
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -10,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
 
 interface Team {
   number: string;
@@ -32,6 +34,8 @@ const TEAMS: Team[] = [
   { number: "8557", name: "Conquera", logo: "https://www.rookieverse.net/uploads/team_11/logo_1768243376_f29e38a2.jpg" },
   { number: "11371", name: "Odyssey", logo: "https://www.rookieverse.net/uploads/team_18/logo_1770490468_9feede33.jpg" },
 ];
+
+
 
 const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -62,12 +66,60 @@ const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
 
 const TeamsScreen: React.FC = () => {
   const [search, setSearch] = useState("");
-  const headerAnim = useRef(new Animated.Value(0)).current;
+  const [headerHeight, setHeaderHeight] = useState(210);
   const router = useRouter();
 
-  useEffect(() => {
-    Animated.timing(headerAnim, { toValue: 1, duration: 600, useNativeDriver: true }).start();
-  }, []);
+  // Scroll-aware header
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const lastScrollY = useRef(0);
+  const headerVisible = useRef(true);
+  const headerAnim = useRef(new Animated.Value(1)).current; // 1 = visible, 0 = hidden
+
+  const showHeader = () => {
+    if (!headerVisible.current) {
+      headerVisible.current = true;
+      Animated.parallel([
+        Animated.timing(headerAnim, {
+          toValue: 1,
+          duration: 280,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  };
+
+  const hideHeader = () => {
+    if (headerVisible.current) {
+      headerVisible.current = false;
+      Animated.parallel([
+        Animated.timing(headerAnim, {
+          toValue: 0,
+          duration: 220,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  };
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentY = e.nativeEvent.contentOffset.y;
+    const diff = currentY - lastScrollY.current;
+
+    if (currentY <= 10) {
+      showHeader();
+    } else if (diff > 4) {
+      hideHeader();
+    } else if (diff < -4) {
+      showHeader();
+    }
+
+    lastScrollY.current = currentY;
+  };
+
+  const headerTranslateY = headerAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-headerHeight, 0],
+  });
 
   const filtered = TEAMS.filter(
     (t) =>
@@ -79,32 +131,48 @@ const TeamsScreen: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fdfaf2" />
 
-      <Animated.View style={[styles.header, { opacity: headerAnim }]}>
+      {/* Sticky animated header */}
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            opacity: headerAnim,
+            transform: [{ translateY: headerTranslateY }],
+          },
+        ]}
+        onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+      >
         <TouchableOpacity onPress={() => router.push("/(tabs)")} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← Geri</Text>
         </TouchableOpacity>
         <Text style={styles.headerLabel}>TOPLULUK</Text>
         <Text style={styles.headerTitle}>Takımlar</Text>
         <Text style={styles.headerSub}>{TEAMS.length} takım listeleniyor</Text>
+
+        {/* Search bar inside header so it hides with it */}
+        <View style={styles.searchContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Takım adı veya numara ara..."
+            placeholderTextColor="#9ca3af"
+            value={search}
+            onChangeText={setSearch}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch("")}>
+              <Text style={styles.clearBtn}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </Animated.View>
 
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Takım adı veya numara ara..."
-          placeholderTextColor="#9ca3af"
-          value={search}
-          onChangeText={setSearch}
-        />
-        {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch("")}>
-            <Text style={styles.clearBtn}>✕</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.list, { paddingTop: headerHeight + 12 }]}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
         {filtered.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyText}>Takım bulunamadı</Text>
@@ -123,21 +191,28 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fdfaf2" },
 
   header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    backgroundColor: "#fdfaf2",
     paddingHorizontal: 24,
     paddingTop: 64,
-    paddingBottom: 20,
+    paddingBottom: 16,
+    // Subtle bottom border when floating over content
+    borderBottomWidth: 1,
+    borderBottomColor: "#ede8d8",
   },
-  backBtn: { marginBottom: 12 },
+  backBtn: { marginBottom: 10 },
   backBtnText: { color: "#111827", fontSize: 16, fontWeight: "800" },
-  headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
-  headerTitle: { fontSize: 32, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 4 },
-  headerSub: { fontSize: 14, color: "#9ca3af" },
+  headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 2 },
+  headerTitle: { fontSize: 30, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 2 },
+  headerSub: { fontSize: 13, color: "#9ca3af", marginBottom: 12 },
 
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 24,
-    marginBottom: 16,
     backgroundColor: "#f5f0e0",
     borderRadius: 14,
     paddingHorizontal: 14,

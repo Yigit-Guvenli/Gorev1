@@ -1,8 +1,10 @@
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
-  Dimensions,
   Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -11,9 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
-
-const { width } = Dimensions.get("window");
 
 interface Course {
   id: string;
@@ -91,6 +90,8 @@ const LEVEL_COLORS: Record<string, string> = {
   "İleri": "#f87171",
 };
 
+
+
 const FilterButton: React.FC<{ label: string; active: boolean; onPress: () => void }> = ({ label, active, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
@@ -102,10 +103,14 @@ const FilterButton: React.FC<{ label: string; active: boolean; onPress: () => vo
       borderWidth: 1.5,
       borderColor: active ? "#e5ae32" : "#c8bfa0",
       backgroundColor: active ? "#e5ae32" : "#fdfaf2",
-      marginRight: 8,
+      minWidth: 60,
+      alignItems: "center",
+      justifyContent: "center",
     }}
   >
-    <Text style={{ fontSize: 13, fontWeight: "700", color: "#111827" }}>{label}</Text>
+    <Text style={{ fontSize: 13, fontWeight: "700", color: active ? "#111827" : "#333333", includeFontPadding: false }}>
+      {label}
+    </Text>
   </TouchableOpacity>
 );
 
@@ -146,12 +151,40 @@ const CoursesScreen: React.FC = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Tümü");
   const [activeLevel, setActiveLevel] = useState("Tümü");
-  const headerAnim = useRef(new Animated.Value(0)).current;
+  const [headerHeight, setHeaderHeight] = useState(270);
   const router = useRouter();
 
-  useEffect(() => {
-    Animated.timing(headerAnim, { toValue: 1, duration: 600, useNativeDriver: true }).start();
-  }, []);
+  const lastScrollY = useRef(0);
+  const headerVisible = useRef(true);
+  const headerAnim = useRef(new Animated.Value(1)).current;
+
+  const showHeader = () => {
+    if (!headerVisible.current) {
+      headerVisible.current = true;
+      Animated.timing(headerAnim, { toValue: 1, duration: 280, useNativeDriver: true }).start();
+    }
+  };
+
+  const hideHeader = () => {
+    if (headerVisible.current) {
+      headerVisible.current = false;
+      Animated.timing(headerAnim, { toValue: 0, duration: 220, useNativeDriver: true }).start();
+    }
+  };
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentY = e.nativeEvent.contentOffset.y;
+    const diff = currentY - lastScrollY.current;
+    if (currentY <= 10) showHeader();
+    else if (diff > 4) hideHeader();
+    else if (diff < -4) showHeader();
+    lastScrollY.current = currentY;
+  };
+
+  const headerTranslateY = headerAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-headerHeight, 0],
+  });
 
   const filtered = COURSES.filter((c) => {
     const matchSearch =
@@ -166,54 +199,55 @@ const CoursesScreen: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fdfaf2" />
 
-      <Animated.View style={[styles.header, { opacity: headerAnim }]}>
+      <Animated.View
+        style={[
+          styles.header,
+          { opacity: headerAnim, transform: [{ translateY: headerTranslateY }] },
+        ]}
+        onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+      >
         <TouchableOpacity onPress={() => router.push("/(tabs)")} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← Geri</Text>
         </TouchableOpacity>
         <Text style={styles.headerLabel}>EĞİTİM</Text>
         <Text style={styles.headerTitle}>Kurslar</Text>
         <Text style={styles.headerSub}>{COURSES.length} kurs mevcut</Text>
+
+        <View style={styles.searchContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Kurs veya takım ara..."
+            placeholderTextColor="#9ca3af"
+            value={search}
+            onChangeText={setSearch}
+          />
+          {search.length > 0 && (
+            <TouchableOpacity onPress={() => setSearch("")}>
+              <Text style={styles.clearBtn}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={{ flexDirection: "row", flexWrap: "wrap", paddingTop: 10, gap: 8 }}>
+          {CATEGORIES.map((cat) => (
+            <FilterButton key={cat} label={cat} active={activeCategory === cat} onPress={() => setActiveCategory(cat)} />
+          ))}
+        </View>
+
+        <View style={{ flexDirection: "row", flexWrap: "wrap", paddingTop: 8, gap: 8 }}>
+          {LEVELS.map((lvl) => (
+            <FilterButton key={lvl} label={lvl} active={activeLevel === lvl} onPress={() => setActiveLevel(lvl)} />
+          ))}
+        </View>
       </Animated.View>
 
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ flexGrow: 0 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 8 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.list, { paddingTop: headerHeight + 12 }]}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
-        {CATEGORIES.map((cat) => (
-          <FilterButton key={cat} label={cat} active={activeCategory === cat} onPress={() => setActiveCategory(cat)} />
-        ))}
-      </ScrollView>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ flexGrow: 0 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 12 }}
-      >
-        {LEVELS.map((lvl) => (
-          <FilterButton key={lvl} label={lvl} active={activeLevel === lvl} onPress={() => setActiveLevel(lvl)} />
-        ))}
-      </ScrollView>
-
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Kurs veya takım ara..."
-          placeholderTextColor="#9ca3af"
-          value={search}
-          onChangeText={setSearch}
-        />
-        {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch("")}>
-            <Text style={styles.clearBtn}>✕</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.list}>
         <Text style={styles.resultCount}>{filtered.length} kurs</Text>
         {filtered.length === 0 ? (
           <View style={styles.empty}>
@@ -238,21 +272,27 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fdfaf2" },
 
   header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    backgroundColor: "#fdfaf2",
     paddingHorizontal: 24,
     paddingTop: 64,
-    paddingBottom: 16,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ede8d8",
   },
-  backBtn: { marginBottom: 12 },
+  backBtn: { marginBottom: 10 },
   backBtnText: { color: "#111827", fontSize: 16, fontWeight: "800" },
-  headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
-  headerTitle: { fontSize: 32, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 4 },
-  headerSub: { fontSize: 14, color: "#9ca3af" },
+  headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 2 },
+  headerTitle: { fontSize: 30, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 2 },
+  headerSub: { fontSize: 13, color: "#9ca3af", marginBottom: 10 },
 
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 24,
-    marginBottom: 12,
     backgroundColor: "#f5f0e0",
     borderRadius: 14,
     paddingHorizontal: 14,
