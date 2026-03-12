@@ -14,30 +14,103 @@ import {
   View,
 } from "react-native";
 
-interface Team {
+export interface Team {
   number: string;
   name: string;
-  logo: string;
+  logo: any;        // local asset — detay sayfası için
+  logoUrl: string;  // URL — liste için
+  instagram?: string;
+  youtube?: string;
+  linkedin?: string;
+  website?: string;
 }
 
-const TEAMS: Team[] = [
-  { number: "4972", name: "Borusan Robotics", logo: "https://www.rookieverse.net/uploads/team_10/logo_1767641761_5325daf9.png" },
-  { number: "6228", name: "Mat Robotics", logo: "https://www.rookieverse.net/uploads/team_6/logo_1759600232_2db59518.png" },
-  { number: "6232", name: "FLORYA BISONS", logo: "https://www.rookieverse.net/uploads/team_7/logo_1761204118_f05d27fa.jpg" },
-  { number: "6402", name: "Göktürkler", logo: "https://www.rookieverse.net/uploads/team_13/logo_1769350917_0e4b95ab.jpg" },
-  { number: "6430", name: "Kalsedon", logo: "https://www.rookieverse.net/uploads/team_8/logo_1761852879_c26ed027.jpg" },
-  { number: "6948", name: "Eagles", logo: "https://www.rookieverse.net/uploads/team_12/logo_1769350845_1e5c443c.jpg" },
-  { number: "6985", name: "EnkaTech", logo: "https://www.rookieverse.net/uploads/team_9/logo_1762029922_fb7caad3.jpg" },
-  { number: "7086", name: "Iorobot", logo: "https://www.rookieverse.net/uploads/team_14/logo_1769440070_49ffc47e.jpg" },
-  { number: "7439", name: "Qubit", logo: "https://www.rookieverse.net/uploads/team_16/logo_1769605766_b8730791.jpg" },
-  { number: "7742", name: "Cosmos Robot Works", logo: "https://www.rookieverse.net/uploads/team_15/logo_1769605611_867aee15.jpg" },
-  { number: "8557", name: "Conquera", logo: "https://www.rookieverse.net/uploads/team_11/logo_1768243376_f29e38a2.jpg" },
-  { number: "11371", name: "Odyssey", logo: "https://www.rookieverse.net/uploads/team_18/logo_1770490468_9feede33.jpg" },
+export const TEAMS: Team[] = [
+  {
+    number: "4972",
+    name: "Borusan Robotics",
+    logo: require("@/assets/images/Teams/BorusanRobotics.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_10/logo_1767641761_5325daf9.png",
+    instagram: "https://www.instagram.com/borusanrobotik4972",
+    youtube: "https://www.youtube.com/@borusanrobotics",
+    linkedin: "https://www.linkedin.com/company/borusan-robotik/",
+  },
+  {
+    number: "6228",
+    name: "Mat Robotics",
+    logo: require("@/assets/images/Teams/MatRobotics.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_6/logo_1759600232_2db59518.png",
+    instagram: "https://www.instagram.com/matrobotics6228",
+    website: "https://team6228.com",
+    linkedin: "https://www.linkedin.com/company/team6228",
+  },
+  {
+    number: "6232",
+    name: "FLORYA BISONS",
+    logo: require("@/assets/images/Teams/Florya.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_7/logo_1761204118_f05d27fa.jpg",
+  },
+  {
+    number: "6402",
+    name: "Göktürkler",
+    logo: require("@/assets/images/Teams/Göktürkler.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_13/logo_1769350917_0e4b95ab.jpg",
+  },
+  {
+    number: "6430",
+    name: "Kalsedon",
+    logo: require("@/assets/images/Teams/Kalsedon.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_8/logo_1761852879_c26ed027.jpg",
+  },
+  {
+    number: "6948",
+    name: "Eagles",
+    logo: require("@/assets/images/Teams/EAGLES.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_12/logo_1769350845_1e5c443c.jpg",
+  },
+  {
+    number: "6985",
+    name: "EnkaTech",
+    logo: require("@/assets/images/Teams/Enka.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_9/logo_1762029922_fb7caad3.jpg",
+  },
+  {
+    number: "7086",
+    name: "Iorobot",
+    logo: require("@/assets/images/Teams/IOROBOT.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_14/logo_1769440070_49ffc47e.jpg",
+  },
+  {
+    number: "7439",
+    name: "Qubit",
+    logo: require("@/assets/images/Teams/Qubit.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_16/logo_1769605766_b8730791.jpg",
+  },
+  {
+    number: "7742",
+    name: "Cosmos Robot Works",
+    logo: require("@/assets/images/Teams/Cosmos Robot Works.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_15/logo_1769605611_867aee15.jpg",
+    instagram: "https://www.instagram.com/cosmosrobotworks",
+    youtube: "https://www.youtube.com/@cosmosrobotworks",
+    linkedin: "https://www.linkedin.com/company/cosmos-robot-works/",
+    website: "https://cosmos7742.com/",
+  },
+  {
+    number: "8557",
+    name: "Conquera",
+    logo: require("@/assets/images/Teams/Conquera.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_11/logo_1768243376_f29e38a2.jpg",
+  },
+  {
+    number: "11371",
+    name: "Odyssey",
+    logo: require("@/assets/images/Teams/Odyssey.png"),
+    logoUrl: "https://www.rookieverse.net/uploads/team_18/logo_1770490468_9feede33.jpg",
+  },
 ];
 
-
-
-const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
+const TeamCard: React.FC<{ team: Team; index: number; onPress: () => void }> = ({ team, index, onPress }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
@@ -50,8 +123,8 @@ const TeamCard: React.FC<{ team: Team; index: number }> = ({ team, index }) => {
 
   return (
     <Animated.View style={[styles.teamCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-      <TouchableOpacity style={styles.teamCardInner} activeOpacity={0.8}>
-        <Image source={{ uri: team.logo }} style={styles.teamLogo} resizeMode="contain" />
+      <TouchableOpacity style={styles.teamCardInner} activeOpacity={0.8} onPress={onPress}>
+        <Image source={{ uri: team.logoUrl }} style={styles.teamLogo} resizeMode="contain" />
         <View style={styles.teamInfo}>
           <Text style={styles.teamName}>{team.name}</Text>
           <View style={styles.teamNumberBadge}>
@@ -69,50 +142,30 @@ const TeamsScreen: React.FC = () => {
   const [headerHeight, setHeaderHeight] = useState(210);
   const router = useRouter();
 
-  // Scroll-aware header
-  const scrollY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const headerVisible = useRef(true);
-  const headerAnim = useRef(new Animated.Value(1)).current; // 1 = visible, 0 = hidden
+  const headerAnim = useRef(new Animated.Value(1)).current;
 
   const showHeader = () => {
     if (!headerVisible.current) {
       headerVisible.current = true;
-      Animated.parallel([
-        Animated.timing(headerAnim, {
-          toValue: 1,
-          duration: 280,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      Animated.timing(headerAnim, { toValue: 1, duration: 280, useNativeDriver: true }).start();
     }
   };
 
   const hideHeader = () => {
     if (headerVisible.current) {
       headerVisible.current = false;
-      Animated.parallel([
-        Animated.timing(headerAnim, {
-          toValue: 0,
-          duration: 220,
-          useNativeDriver: true,
-        }),
-      ]).start();
+      Animated.timing(headerAnim, { toValue: 0, duration: 220, useNativeDriver: true }).start();
     }
   };
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const currentY = e.nativeEvent.contentOffset.y;
     const diff = currentY - lastScrollY.current;
-
-    if (currentY <= 10) {
-      showHeader();
-    } else if (diff > 4) {
-      hideHeader();
-    } else if (diff < -4) {
-      showHeader();
-    }
-
+    if (currentY <= 10) showHeader();
+    else if (diff > 4) hideHeader();
+    else if (diff < -4) showHeader();
     lastScrollY.current = currentY;
   };
 
@@ -131,14 +184,10 @@ const TeamsScreen: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fdfaf2" />
 
-      {/* Sticky animated header */}
       <Animated.View
         style={[
           styles.header,
-          {
-            opacity: headerAnim,
-            transform: [{ translateY: headerTranslateY }],
-          },
+          { opacity: headerAnim, transform: [{ translateY: headerTranslateY }] },
         ]}
         onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
       >
@@ -149,7 +198,6 @@ const TeamsScreen: React.FC = () => {
         <Text style={styles.headerTitle}>Takımlar</Text>
         <Text style={styles.headerSub}>{TEAMS.length} takım listeleniyor</Text>
 
-        {/* Search bar inside header so it hides with it */}
         <View style={styles.searchContainer}>
           <Text style={styles.searchIcon}>🔍</Text>
           <TextInput
@@ -179,7 +227,17 @@ const TeamsScreen: React.FC = () => {
           </View>
         ) : (
           filtered.map((team, i) => (
-            <TeamCard key={team.number} team={team} index={i} />
+            <TeamCard
+              key={team.number}
+              team={team}
+              index={i}
+              onPress={() =>
+                router.push({
+                  pathname: "/(tabs)/team-detail",
+                  params: { number: team.number },
+                })
+              }
+            />
           ))
         )}
       </ScrollView>
@@ -189,7 +247,6 @@ const TeamsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fdfaf2" },
-
   header: {
     position: "absolute",
     top: 0,
@@ -200,7 +257,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 64,
     paddingBottom: 16,
-    // Subtle bottom border when floating over content
     borderBottomWidth: 1,
     borderBottomColor: "#ede8d8",
   },
@@ -209,7 +265,6 @@ const styles = StyleSheet.create({
   headerLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 2 },
   headerTitle: { fontSize: 30, fontWeight: "900", color: "#111827", letterSpacing: -1, marginBottom: 2 },
   headerSub: { fontSize: 13, color: "#9ca3af", marginBottom: 12 },
-
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -223,13 +278,7 @@ const styles = StyleSheet.create({
   searchIcon: { fontSize: 16, marginRight: 8 },
   searchInput: { flex: 1, fontSize: 15, color: "#111827" },
   clearBtn: { fontSize: 14, color: "#9ca3af", paddingLeft: 8 },
-
-  list: {
-    paddingHorizontal: 24,
-    paddingBottom: 32,
-    gap: 12,
-  },
-
+  list: { paddingHorizontal: 24, paddingBottom: 32, gap: 12 },
   teamCard: {
     backgroundColor: "#f5f0e0",
     borderRadius: 16,
@@ -237,18 +286,8 @@ const styles = StyleSheet.create({
     borderColor: "#e8e0c8",
     overflow: "hidden",
   },
-  teamCardInner: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 14,
-    gap: 14,
-  },
-  teamLogo: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    backgroundColor: "#fdfaf2",
-  },
+  teamCardInner: { flexDirection: "row", alignItems: "center", padding: 14, gap: 14 },
+  teamLogo: { width: 56, height: 56, borderRadius: 12 },
   teamInfo: { flex: 1, gap: 6 },
   teamName: { fontSize: 16, fontWeight: "800", color: "#111827" },
   teamNumberBadge: {
@@ -260,7 +299,6 @@ const styles = StyleSheet.create({
   },
   teamNumber: { fontSize: 11, fontWeight: "800", color: "#111827" },
   teamArrow: { fontSize: 24, color: "#9ca3af", fontWeight: "300" },
-
   empty: { alignItems: "center", paddingTop: 60 },
   emptyText: { fontSize: 16, color: "#9ca3af" },
 });
