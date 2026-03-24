@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Animated,
     Image,
@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import { TEAMS } from "./teams";
 
-// Courses that belong to each team (matched by team name prefix)
 const TEAM_COURSES: Record<string, { title: string; level: string; cover: string }[]> = {
   "6430": [
     {
@@ -73,6 +72,7 @@ const SocialButton: React.FC<{ emoji: string; label: string; url: string }> = ({
 const CourseCard: React.FC<{ title: string; level: string; cover: string; index: number }> = ({ title, level, cover, index }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     Animated.parallel([
@@ -83,7 +83,18 @@ const CourseCard: React.FC<{ title: string; level: string; cover: string; index:
 
   return (
     <Animated.View style={[styles.courseCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-      <Image source={{ uri: cover }} style={styles.courseImage} resizeMode="cover" />
+      {imgError ? (
+        <View style={styles.courseImagePlaceholder}>
+          <Text style={styles.courseImagePlaceholderText}>📷</Text>
+        </View>
+      ) : (
+        <Image
+          source={{ uri: cover }}
+          style={styles.courseImage}
+          resizeMode="cover"
+          onError={() => setImgError(true)}
+        />
+      )}
       <View style={styles.courseBody}>
         <Text style={styles.courseTitle} numberOfLines={2}>{title}</Text>
         <View style={[styles.levelBadge, { backgroundColor: LEVEL_COLORS[level] ?? "#e5ae32" }]}>
@@ -132,23 +143,21 @@ const TeamDetailScreen: React.FC = () => {
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
 
-        {/* Back Button */}
         <TouchableOpacity onPress={() => router.push("/(tabs)/teams")} style={styles.backBtn}>
           <Text style={styles.backBtnText}>← Geri</Text>
         </TouchableOpacity>
 
-        {/* Profile Header */}
         <Animated.View style={[styles.profileHeader, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
           <View style={[
             styles.logoContainer,
-            { backgroundColor: 
+            { backgroundColor:
                 team.number === "7439" ? "#fddc01" :
                 team.number === "6985" ? "#1b46b6" :
                 team.number === "6430" ? "#3b0c6c" :
                 team.number === "6232" ? "#0d093c" :
                 team.number === "4972" || team.number === "6948" || team.number === "6402" || team.number === "7086" || team.number === "8557" ? "#000000" :
                 team.number === "11371" ? "#02050a" :
-                "#ffffff", // Mat ve Cosmos
+                "#ffffff",
               borderColor:
                 team.number === "7742" || team.number === "6228" ? "#e0e0e0" : "transparent"
             }
@@ -161,28 +170,18 @@ const TeamDetailScreen: React.FC = () => {
           </View>
         </Animated.View>
 
-        {/* Social Links */}
         {hasSocial && (
           <Animated.View style={[styles.section, { opacity: fadeAnim }]}>
             <Text style={styles.sectionLabel}>SOSYAL MEDYA</Text>
             <View style={styles.socialRow}>
-              {team.instagram && (
-                <SocialButton emoji="📸" label="Instagram" url={team.instagram} />
-              )}
-              {team.youtube && (
-                <SocialButton emoji="▶️" label="YouTube" url={team.youtube} />
-              )}
-              {team.linkedin && (
-                <SocialButton emoji="💼" label="LinkedIn" url={team.linkedin} />
-              )}
-              {team.website && (
-                <SocialButton emoji="🌐" label="Web Sitesi" url={team.website} />
-              )}
+              {team.instagram && <SocialButton emoji="📸" label="Instagram" url={team.instagram} />}
+              {team.youtube && <SocialButton emoji="▶️" label="YouTube" url={team.youtube} />}
+              {team.linkedin && <SocialButton emoji="💼" label="LinkedIn" url={team.linkedin} />}
+              {team.website && <SocialButton emoji="🌐" label="Web Sitesi" url={team.website} />}
             </View>
           </Animated.View>
         )}
 
-        {/* Courses */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>KURSLAR</Text>
           <Text style={styles.sectionTitle}>Bu Takımın Kursları</Text>
@@ -213,11 +212,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fdfaf2" },
   scrollContent: { paddingBottom: 48 },
 
-  backBtn: {
-    paddingHorizontal: 24,
-    paddingTop: 64,
-    paddingBottom: 8,
-  },
+  backBtn: { paddingHorizontal: 24, paddingTop: 64, paddingBottom: 8 },
   backBtnText: { color: "#111827", fontSize: 16, fontWeight: "800" },
 
   profileHeader: {
@@ -253,31 +248,11 @@ const styles = StyleSheet.create({
   },
   numberText: { fontSize: 13, fontWeight: "800", color: "#111827" },
 
-  section: {
-    paddingHorizontal: 24,
-    marginBottom: 28,
-  },
-  sectionLabel: {
-    color: "#e5ae32",
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "900",
-    color: "#111827",
-    letterSpacing: -0.5,
-    marginBottom: 14,
-  },
+  section: { paddingHorizontal: 24, marginBottom: 28 },
+  sectionLabel: { color: "#e5ae32", fontSize: 11, fontWeight: "800", letterSpacing: 2, marginBottom: 4 },
+  sectionTitle: { fontSize: 20, fontWeight: "900", color: "#111827", letterSpacing: -0.5, marginBottom: 14 },
 
-  socialRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 8,
-  },
+  socialRow: { flexDirection: "row", flexWrap: "wrap", gap: 10, marginTop: 8 },
   socialBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -303,14 +278,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   courseImage: { width: 80, height: 80, backgroundColor: "#e8e0c8" },
+  courseImagePlaceholder: {
+    width: 80,
+    height: 80,
+    backgroundColor: "#e8e0c8",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  courseImagePlaceholderText: { fontSize: 24 },
   courseBody: { flex: 1, padding: 14, gap: 8 },
   courseTitle: { fontSize: 14, fontWeight: "800", color: "#111827", lineHeight: 20 },
   levelBadge: { alignSelf: "flex-start", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
   levelText: { fontSize: 10, fontWeight: "800", color: "#111827" },
-
-  emptyState: { alignItems: "center", paddingTop: 48, paddingHorizontal: 24, gap: 12 },
-  emptyEmoji: { fontSize: 48 },
-  emptyText: { fontSize: 15, color: "#9ca3af", textAlign: "center" },
 
   noCoursesBox: {
     backgroundColor: "#f5f0e0",

@@ -3,7 +3,7 @@
     "name": "Gorev1",
     "slug": "Gorev1",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "gorev1",
     "userInterfaceStyle": "automatic",

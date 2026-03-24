@@ -1,0 +1,257 @@
+{
+  "courses": [
+    {
+      "id": "kurs_b7463c4ad78235aa",
+      "title": "Kapsamlı SOLIDWORKS Eğitimi",
+      "team": "Kalsedon #6430",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_85_cover_f463cd1204dd5744.png",
+      "desc": "Kurs sonunda; aklınıza gelen bir parçayı tasarlayabilecek, montaj mantığı ile bileşenleri birleştirerek robotunuzu modelleyebilecek ve mekanik sistemleri tasarlayabileceksiniz."
+    },
+    {
+      "id": "kurs_95e76b707a474466",
+      "title": "FRC Takımları İçin Robot Yazılım Eğitimi",
+      "team": "Mat Robotics #6228",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_88_cover_27875cecf54e67dd.jpeg",
+      "desc": "FRC takımları için robot yazılımı geliştirme eğitimi."
+    },
+    {
+      "id": "kurs_73b61a371e4eae29",
+      "title": "Fusion 360 Eğitimi",
+      "team": "Mat Robotics #6228",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_82_cover_9fc8db35e94b6113.png",
+      "desc": "Yeni başlayanlara FRC robot tasarımı için gerekli olan Fusion 360 becerilerini kazandırmayı amaçlar."
+    },
+    {
+      "id": "kurs_8a8bd1372a7f0692",
+      "title": "FRC Takımları İçin Sponsor Bulma Rehberi",
+      "team": "Mat Robotics #6228",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_84_cover_da5b57ec2547bcb6.png",
+      "desc": "Rookielere sponsorluk bulma ve sürdürme sürecini öğretmeyi amaçlar."
+    },
+    {
+      "id": "kurs_1b4c930e5ffa4bfc",
+      "title": "Cosmic Science",
+      "team": "Cosmos Robot Works #7742",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_90_cover_ae11997ed7d4b384.png",
+      "desc": "Takımların sürdürülebilirlik konusunda bilinç kazanmasını ve bunu PR faaliyetlerine yansıtabilmelerini sağlar."
+    },
+    {
+      "id": "kurs_f61e85b8ce09faa8",
+      "title": "FRC Hibe Bulma Süreci Rehberi",
+      "team": "Mat Robotics #6228",
+      "category": "FRC",
+      "level": "Başlangıç",
+      "cover": "https://www.rookieverse.net/uploads/covers/course_83_cover_6bebbfe7c3857731.jpg",
+      "desc": "FRC takımlarının hibe süreçlerini doğru yönetmek ve gerekli kaynakları etkili şekilde elde edebilmesini sağlar."
+    }
+  ],
+  "modules": [
+    {
+      "id": "mod_yazilim_1",
+      "courseId": "kurs_95e76b707a474466",
+      "title": "Robot Yazılımına Giriş",
+      "order": 1
+    },
+    {
+      "id": "mod_yazilim_2",
+      "courseId": "kurs_95e76b707a474466",
+      "title": "WPILib Temelleri",
+      "order": 2
+    },
+    {
+      "id": "mod_yazilim_3",
+      "courseId": "kurs_95e76b707a474466",
+      "title": "Sürücü Kontrolü",
+      "order": 3
+    },
+    {
+      "id": "mod_fusion_1",
+      "courseId": "kurs_73b61a371e4eae29",
+      "title": "Fusion 360'a Giriş",
+      "order": 1
+    },
+    {
+      "id": "mod_fusion_2",
+      "courseId": "kurs_73b61a371e4eae29",
+      "title": "2D Taslak Çizimi",
+      "order": 2
+    },
+    {
+      "id": "mod_fusion_3",
+      "courseId": "kurs_73b61a371e4eae29",
+      "title": "3D Modelleme",
+      "order": 3
+    },
+    {
+      "id": "mod_sponsor_1",
+      "courseId": "kurs_8a8bd1372a7f0692",
+      "title": "Sponsorluğa Giriş",
+      "order": 1
+    },
+    {
+      "id": "mod_sponsor_2",
+      "courseId": "kurs_8a8bd1372a7f0692",
+      "title": "Sponsor Bulma Stratejileri",
+      "order": 2
+    },
+    {
+      "id": "mod_cosmic_1",
+      "courseId": "kurs_1b4c930e5ffa4bfc",
+      "title": "Sürdürülebilirlik Nedir?",
+      "order": 1
+    },
+    {
+      "id": "mod_cosmic_2",
+      "courseId": "kurs_1b4c930e5ffa4bfc",
+      "title": "PR ve Medya Stratejisi",
+      "order": 2
+    },
+    {
+      "id": "mod_hibe_1",
+      "courseId": "kurs_f61e85b8ce09faa8",
+      "title": "Hibe Nedir?",
+      "order": 1
+    },
+    {
+      "id": "mod_hibe_2",
+      "courseId": "kurs_f61e85b8ce09faa8",
+      "title": "Başvuru Süreci",
+      "order": 2
+    },
+    {
+      "id": "mod_sw_1",
+      "courseId": "kurs_b7463c4ad78235aa",
+      "title": "1",
+      "order": 1
+    },
+    {
+      "id": "mod_sw_2",
+      "courseId": "kurs_b7463c4ad78235aa",
+      "title": "2",
+      "order": 2
+    },
+    {
+      "id": "mod_sw_3",
+      "courseId": "kurs_b7463c4ad78235aa",
+      "title": "3",
+      "order": 3
+    },
+    {
+      "id": "mod_sw_4",
+      "courseId": "kurs_b7463c4ad78235aa",
+      "title": "4",
+      "order": 4
+    }
+  ],
+  "lessons": [
+    {
+      "id": "les_yz_1_1",
+      "moduleId": "mod_yazilim_1",
+      "title": "FRC Yazılım Ekosistemi",
+      "type": "video",
+      "content": "https://www.youtube.com/watch?v=example6",
+      "duration": "8 dk",
+      "order": 1
+    },
+    {
+      "id": "les_yz_1_2",
+      "moduleId": "mod_yazilim_1",
+      "title": "VS Code ve WPILib Kurulumu",
+      "type": "text",
+      "content": "VS Code ve WPILib kurulumunu adım adım yapacağız. Önce VS Code'u indirin, ardından WPILib extension'ını kurun.",
+      "duration": "15 dk",
+      "order": 2
+    },
+    {
+      "id": "les_yz_2_1",
+      "moduleId": "mod_yazilim_2",
+      "title": "Robot.java Yapısı",
+      "type": "video",
+      "content": "https://www.youtube.com/watch?v=example7",
+      "duration": "20 dk",
+      "order": 1
+    },
+    {
+      "id": "les_fu_1_1",
+      "moduleId": "mod_fusion_1",
+      "title": "Fusion 360 Nedir?",
+      "type": "video",
+      "content": "https://www.youtube.com/watch?v=example8",
+      "duration": "10 dk",
+      "order": 1
+    },
+    {
+      "id": "les_fu_2_1",
+      "moduleId": "mod_fusion_2",
+      "title": "Sketch Temelleri",
+      "type": "video",
+      "content": "https://www.youtube.com/watch?v=example9",
+      "duration": "15 dk",
+      "order": 1
+    },
+    {
+      "id": "les_sp_1_1",
+      "moduleId": "mod_sponsor_1",
+      "title": "Sponsorluk Neden Önemli?",
+      "type": "text",
+      "content": "FRC takımları için sponsorluk, mali sürdürülebilirliğin temelidir. Bu derste sponsorluğun önemini ve temel kavramları öğreneceksiniz.",
+      "duration": "8 dk",
+      "order": 1
+    },
+    {
+      "id": "les_sp_2_1",
+      "moduleId": "mod_sponsor_2",
+      "title": "Potansiyel Sponsorları Bulmak",
+      "type": "video",
+      "content": "https://www.youtube.com/watch?v=example10",
+      "duration": "12 dk",
+      "order": 1
+    },
+    {
+      "id": "les_sw_1_1",
+      "moduleId": "mod_sw_1",
+      "title": "Ders 1",
+      "type": "video",
+      "content": "https://www.rookieverse.net/uploads/course_85/module_123/Ders_1_20251209_122852_4034aae9.mp4",
+      "duration": "",
+      "order": 1
+    },
+    {
+      "id": "les_sw_2_1",
+      "moduleId": "mod_sw_2",
+      "title": "Ders 2",
+      "type": "video",
+      "content": "https://www.rookieverse.net/uploads/course_85/module_124/Ders_2_20251209_122936_e5341b35.mp4",
+      "duration": "",
+      "order": 1
+    },
+    {
+      "id": "les_sw_3_1",
+      "moduleId": "mod_sw_3",
+      "title": "Ders 3",
+      "type": "video",
+      "content": "https://www.rookieverse.net/uploads/course_85/module_125/Ders_3_20251209_123110_a0a88833.mp4",
+      "duration": "",
+      "order": 1
+    },
+    {
+      "id": "les_sw_4_1",
+      "moduleId": "mod_sw_4",
+      "title": "Ders 4",
+      "type": "video",
+      "content": "https://www.rookieverse.net/uploads/course_85/module_126/Ders_4_20251209_123421_e03732ee.mp4",
+      "duration": "",
+      "order": 1
+    }
+  ]
+}

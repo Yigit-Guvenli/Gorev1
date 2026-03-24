@@ -90,8 +90,6 @@ const LEVEL_COLORS: Record<string, string> = {
   "İleri": "#f87171",
 };
 
-
-
 const FilterButton: React.FC<{ label: string; active: boolean; onPress: () => void }> = ({ label, active, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
@@ -259,7 +257,7 @@ const CoursesScreen: React.FC = () => {
               key={course.id}
               course={course}
               index={i}
-              onPress={() => console.log("Kurs:", course.id)}
+              onPress={() => router.navigate({ pathname: "/(tabs)/course-detail", params: { id: course.id } } as any)}
             />
           ))
         )}
