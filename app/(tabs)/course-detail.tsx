@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Animated,
   Image,
+  Linking,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -12,7 +13,7 @@ import {
   View,
 } from "react-native";
 
-const BASE_URL = "http://10.0.2.2:3000"; // Android emülatör için localhost
+const BASE_URL = "http://192.168.1.110:3000";
 
 interface Module {
   id: string;
@@ -25,7 +26,7 @@ interface Lesson {
   id: string;
   moduleId: string;
   title: string;
-  type: "video" | "text";
+  type: "video" | "text" | "pdf";
   content: string;
   duration: string;
   order: number;
@@ -41,6 +42,12 @@ interface Course {
   desc: string;
 }
 
+const LESSON_ICONS: Record<string, string> = {
+  video: "▶",
+  pdf: "📄",
+  text: "📝",
+};
+
 const CourseDetailScreen: React.FC = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -48,6 +55,7 @@ const CourseDetailScreen: React.FC = () => {
   const [modules, setModules] = useState<Module[]>([]);
   const [lessons, setLessons] = useState<Record<string, Lesson[]>>({});
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
+  const [loadingModule, setLoadingModule] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const headerAnim = useRef(new Animated.Value(0)).current;
 
@@ -75,40 +83,62 @@ const CourseDetailScreen: React.FC = () => {
     }
   };
 
-  const fetchLessons = async (moduleId: string) => {
-    if (lessons[moduleId]) return;
-    try {
-      const res = await fetch(`${BASE_URL}/lessons?moduleId=${moduleId}`);
-      const data = await res.json();
-      setLessons(prev => ({
-        ...prev,
-        [moduleId]: data.sort((a: Lesson, b: Lesson) => a.order - b.order),
-      }));
-    } catch (error) {
-      console.error("Ders çekme hatası:", error);
+  const toggleModule = async (moduleId: string) => {
+    // Zaten açıksa kapat
+    if (expandedModule === moduleId) {
+      setExpandedModule(null);
+      return;
     }
+
+    // Dersler daha önce yüklenmediyse çek
+    if (!lessons[moduleId]) {
+      setLoadingModule(moduleId);
+      try {
+        const res = await fetch(`${BASE_URL}/lessons?moduleId=${moduleId}`);
+        const data = await res.json();
+        const sorted: Lesson[] = data.sort((a: Lesson, b: Lesson) => a.order - b.order);
+        setLessons(prev => ({ ...prev, [moduleId]: sorted }));
+      } catch (error) {
+        console.error("Ders çekme hatası:", error);
+      } finally {
+        setLoadingModule(null);
+      }
+    }
+
+    setExpandedModule(moduleId);
   };
 
-  const toggleModule = async (moduleId: string) => {
-    try {
-      const res = await fetch(`${BASE_URL}/lessons?moduleId=${moduleId}`);
-      const data = await res.json();
-      const sorted = data.sort((a: Lesson, b: Lesson) => a.order - b.order);
-      if (sorted.length > 0) {
-        const nextLesson = sorted[1] ?? null;
-        router.navigate({ 
-          pathname: "/(tabs)/video", 
-          params: { 
-            url: sorted[0].content, 
-            title: sorted[0].title,
-            nextUrl: nextLesson?.content ?? "",
-            nextTitle: nextLesson?.title ?? "",
-            courseId: id,
-          } 
-        } as any);
-      }
-    } catch (error) {
-      console.error("Ders çekme hatası:", error);
+  const handleLessonPress = async (lesson: Lesson, moduleId: string) => {
+    const moduleLessons = lessons[moduleId] ?? [];
+    const currentIndex = moduleLessons.findIndex(l => l.id === lesson.id);
+    const nextLesson = moduleLessons[currentIndex + 1] ?? null;
+
+    if (lesson.type === "pdf") {
+      await Linking.openURL(lesson.content);
+    } else if (lesson.type === "text") {
+      router.navigate({
+        pathname: "/(tabs)/text-lesson",
+        params: {
+          content: lesson.content,
+          title: lesson.title,
+          nextUrl: nextLesson?.content ?? "",
+          nextTitle: nextLesson?.title ?? "",
+          nextType: nextLesson?.type ?? "",
+          courseId: id,
+        },
+      } as any);
+    } else {
+      router.navigate({
+        pathname: "/(tabs)/video",
+        params: {
+          url: lesson.content,
+          title: lesson.title,
+          nextUrl: nextLesson?.content ?? "",
+          nextTitle: nextLesson?.title ?? "",
+          nextType: nextLesson?.type ?? "",
+          courseId: id,
+        },
+      } as any);
     }
   };
 
@@ -163,23 +193,72 @@ const CourseDetailScreen: React.FC = () => {
           <Text style={styles.sectionLabel}>KURS İÇERİĞİ</Text>
           <Text style={styles.sectionTitle}>{modules.length} Modül</Text>
 
-          {modules.map((mod, index) => (
-            <View key={mod.id} style={styles.moduleCard}>
-              <TouchableOpacity
-                style={styles.moduleHeader}
-                onPress={() => toggleModule(mod.id)}
-                activeOpacity={0.8}
-              >
-                <View style={styles.moduleLeft}>
-                  <View style={styles.moduleNumber}>
-                    <Text style={styles.moduleNumberText}>{index + 1}</Text>
+          {modules.map((mod, index) => {
+            const isExpanded = expandedModule === mod.id;
+            const isLoadingThis = loadingModule === mod.id;
+            const modLessons = lessons[mod.id] ?? [];
+
+            return (
+              <View key={mod.id} style={styles.moduleCard}>
+                {/* Modül başlığı */}
+                <TouchableOpacity
+                  style={styles.moduleHeader}
+                  onPress={() => toggleModule(mod.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={styles.moduleLeft}>
+                    <View style={styles.moduleNumber}>
+                      <Text style={styles.moduleNumberText}>{index + 1}</Text>
+                    </View>
+                    <Text style={styles.moduleTitle}>{mod.title}</Text>
                   </View>
-                  <Text style={styles.moduleTitle}>{mod.title}</Text>
-                </View>
-                <Text style={styles.moduleArrow}>▶</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+                  {isLoadingThis ? (
+                    <ActivityIndicator size="small" color="#e5ae32" />
+                  ) : (
+                    <Text style={[styles.moduleArrow, isExpanded && styles.moduleArrowOpen]}>
+                      ▼
+                    </Text>
+                  )}
+                </TouchableOpacity>
+
+                {/* Ders listesi (accordion) */}
+                {isExpanded && modLessons.length > 0 && (
+                  <View style={styles.lessonsList}>
+                    {modLessons.map((lesson, lessonIndex) => (
+                      <TouchableOpacity
+                        key={lesson.id}
+                        style={[
+                          styles.lessonItem,
+                          lessonIndex === modLessons.length - 1 && styles.lessonItemLast,
+                        ]}
+                        onPress={() => handleLessonPress(lesson, mod.id)}
+                        activeOpacity={0.75}
+                      >
+                        <View style={styles.lessonIconBox}>
+                          <Text style={styles.lessonIcon}>
+                            {LESSON_ICONS[lesson.type] ?? "📌"}
+                          </Text>
+                        </View>
+                        <View style={styles.lessonInfo}>
+                          <Text style={styles.lessonTitle}>{lesson.title}</Text>
+                          {lesson.duration ? (
+                            <Text style={styles.lessonDuration}>{lesson.duration}</Text>
+                          ) : null}
+                        </View>
+                        <Text style={styles.lessonChevron}>›</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+
+                {isExpanded && modLessons.length === 0 && !isLoadingThis && (
+                  <View style={styles.emptyLessons}>
+                    <Text style={styles.emptyLessonsText}>Henüz ders eklenmemiş</Text>
+                  </View>
+                )}
+              </View>
+            );
+          })}
         </Animated.View>
       </ScrollView>
     </View>
@@ -192,11 +271,7 @@ const styles = StyleSheet.create({
 
   coverImage: { width: "100%", height: 240, backgroundColor: "#e8e0c8" },
 
-  backBtnAbsolute: {
-    position: "absolute",
-    top: 48,
-    left: 24,
-  },
+  backBtnAbsolute: { position: "absolute", top: 48, left: 24 },
   backBtn: {
     backgroundColor: "#fdfaf2",
     paddingHorizontal: 14,
@@ -245,22 +320,47 @@ const styles = StyleSheet.create({
   },
   moduleNumberText: { fontSize: 14, fontWeight: "900", color: "#111827" },
   moduleTitle: { fontSize: 15, fontWeight: "700", color: "#111827", flex: 1 },
-  moduleArrow: { fontSize: 12, color: "#9ca3af" },
+  moduleArrow: { fontSize: 13, color: "#9ca3af" },
+  moduleArrowOpen: { color: "#e5ae32" },
 
-  lessonsList: { borderTopWidth: 1, borderTopColor: "#e8e0c8" },
+  lessonsList: {
+    borderTopWidth: 1,
+    borderTopColor: "#e8e0c8",
+  },
   lessonItem: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 14,
-    paddingLeft: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
     borderBottomWidth: 1,
     borderBottomColor: "#e8e0c8",
     gap: 12,
+    backgroundColor: "#fdfaf2",
   },
-  lessonIcon: { fontSize: 16 },
+  lessonItemLast: {
+    borderBottomWidth: 0,
+  },
+  lessonIconBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: "#f5f0e0",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  lessonIcon: { fontSize: 15 },
   lessonInfo: { flex: 1 },
   lessonTitle: { fontSize: 14, fontWeight: "600", color: "#111827", marginBottom: 2 },
   lessonDuration: { fontSize: 11, color: "#9ca3af" },
+  lessonChevron: { fontSize: 20, color: "#9ca3af", fontWeight: "300" },
+
+  emptyLessons: {
+    borderTopWidth: 1,
+    borderTopColor: "#e8e0c8",
+    padding: 16,
+    alignItems: "center",
+  },
+  emptyLessonsText: { fontSize: 13, color: "#9ca3af" },
 });
 
 export default CourseDetailScreen;

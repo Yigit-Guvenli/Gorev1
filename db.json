@@ -59,74 +59,32 @@
     {
       "id": "mod_yazilim_1",
       "courseId": "kurs_95e76b707a474466",
-      "title": "Robot Yazılımına Giriş",
+      "title": "1",
       "order": 1
-    },
-    {
-      "id": "mod_yazilim_2",
-      "courseId": "kurs_95e76b707a474466",
-      "title": "WPILib Temelleri",
-      "order": 2
-    },
-    {
-      "id": "mod_yazilim_3",
-      "courseId": "kurs_95e76b707a474466",
-      "title": "Sürücü Kontrolü",
-      "order": 3
     },
     {
       "id": "mod_fusion_1",
       "courseId": "kurs_73b61a371e4eae29",
-      "title": "Fusion 360'a Giriş",
+      "title": "Bölüm 1",
       "order": 1
-    },
-    {
-      "id": "mod_fusion_2",
-      "courseId": "kurs_73b61a371e4eae29",
-      "title": "2D Taslak Çizimi",
-      "order": 2
-    },
-    {
-      "id": "mod_fusion_3",
-      "courseId": "kurs_73b61a371e4eae29",
-      "title": "3D Modelleme",
-      "order": 3
     },
     {
       "id": "mod_sponsor_1",
       "courseId": "kurs_8a8bd1372a7f0692",
-      "title": "Sponsorluğa Giriş",
+      "title": "FRC Takımları İçin Sponsor Bulma Rehberi",
       "order": 1
-    },
-    {
-      "id": "mod_sponsor_2",
-      "courseId": "kurs_8a8bd1372a7f0692",
-      "title": "Sponsor Bulma Stratejileri",
-      "order": 2
     },
     {
       "id": "mod_cosmic_1",
       "courseId": "kurs_1b4c930e5ffa4bfc",
-      "title": "Sürdürülebilirlik Nedir?",
+      "title": "Magazine",
       "order": 1
-    },
-    {
-      "id": "mod_cosmic_2",
-      "courseId": "kurs_1b4c930e5ffa4bfc",
-      "title": "PR ve Medya Stratejisi",
-      "order": 2
     },
     {
       "id": "mod_hibe_1",
       "courseId": "kurs_f61e85b8ce09faa8",
-      "title": "Hibe Nedir?",
+      "title": "1",
       "order": 1
-    },
-    {
-      "id": "mod_hibe_2",
-      "courseId": "kurs_f61e85b8ce09faa8",
-      "title": "Başvuru Süreci",
-      "order": 2
     },
     {
       "id": "mod_sw_1",
@@ -157,64 +115,136 @@
     {
       "id": "les_yz_1_1",
       "moduleId": "mod_yazilim_1",
-      "title": "FRC Yazılım Ekosistemi",
-      "type": "video",
-      "content": "https://www.youtube.com/watch?v=example6",
-      "duration": "8 dk",
-      "order": 1
-    },
-    {
-      "id": "les_yz_1_2",
-      "moduleId": "mod_yazilim_1",
-      "title": "VS Code ve WPILib Kurulumu",
-      "type": "text",
-      "content": "VS Code ve WPILib kurulumunu adım adım yapacağız. Önce VS Code'u indirin, ardından WPILib extension'ını kurun.",
-      "duration": "15 dk",
-      "order": 2
-    },
-    {
-      "id": "les_yz_2_1",
-      "moduleId": "mod_yazilim_2",
-      "title": "Robot.java Yapısı",
-      "type": "video",
-      "content": "https://www.youtube.com/watch?v=example7",
-      "duration": "20 dk",
+      "title": "1",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_88/module_128/FRC_Takimlari_Icin_PID_Kontrol_Rehberi_20260128_131430_340eaf75.pdf",
+      "duration": "",
       "order": 1
     },
     {
       "id": "les_fu_1_1",
       "moduleId": "mod_fusion_1",
-      "title": "Fusion 360 Nedir?",
+      "title": "Bölüm 1",
       "type": "video",
-      "content": "https://www.youtube.com/watch?v=example8",
-      "duration": "10 dk",
-      "order": 1
-    },
-    {
-      "id": "les_fu_2_1",
-      "moduleId": "mod_fusion_2",
-      "title": "Sketch Temelleri",
-      "type": "video",
-      "content": "https://www.youtube.com/watch?v=example9",
-      "duration": "15 dk",
+      "content": "https://www.rookieverse.net/uploads/course_82/module_113/ruhi123_20251020_115437_fc99c3ec.mp4",
+      "duration": "10dk 8sn",
       "order": 1
     },
     {
       "id": "les_sp_1_1",
       "moduleId": "mod_sponsor_1",
       "title": "Sponsorluk Neden Önemli?",
-      "type": "text",
-      "content": "FRC takımları için sponsorluk, mali sürdürülebilirliğin temelidir. Bu derste sponsorluğun önemini ve temel kavramları öğreneceksiniz.",
-      "duration": "8 dk",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_84/module_115/sponsorluk_rehberi_20251031_215934_4ca9523c.pdf",
+      "duration": "",
       "order": 1
     },
     {
-      "id": "les_sp_2_1",
-      "moduleId": "mod_sponsor_2",
-      "title": "Potansiyel Sponsorları Bulmak",
-      "type": "video",
-      "content": "https://www.youtube.com/watch?v=example10",
-      "duration": "12 dk",
+      "id": "les_cosmic_1_1",
+      "moduleId": "mod_cosmic_1",
+      "title": "1",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-AffordableAndCleanEnergy_20260219_191634_dcc9c95e.pdf",
+      "duration": "",
+      "order": 1
+    },
+    {
+      "id": "les_cosmic_1_2",
+      "moduleId": "mod_cosmic_1",
+      "title": "2",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-DecentWorkAndEconomicGrowth_20260219_191634_4c272a30.pdf",
+      "duration": "",
+      "order": 2
+    },
+    {
+      "id": "les_cosmic_1_3",
+      "moduleId": "mod_cosmic_1",
+      "title": "3",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-GenderEquality_20260219_191634_cca21e46.pdf",
+      "duration": "",
+      "order": 3
+    },
+    {
+      "id": "les_cosmic_1_4",
+      "moduleId": "mod_cosmic_1",
+      "title": "4",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-GoodHealthAndWellBeing_20260219_191634_0709a26d.pdf",
+      "duration": "",
+      "order": 4
+    },
+    {
+      "id": "les_cosmic_1_5",
+      "moduleId": "mod_cosmic_1",
+      "title": "5",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-IndustryInnovationAndInfrastructure_20260219_191634_91251ae9.pdf",
+      "duration": "",
+      "order": 5
+    },
+    {
+      "id": "les_cosmic_1_6",
+      "moduleId": "mod_cosmic_1",
+      "title": "6",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-LifeBelowWater_20260219_191635_4f17fd08.pdf",
+      "duration": "",
+      "order": 6
+    },
+    {
+      "id": "les_cosmic_1_7",
+      "moduleId": "mod_cosmic_1",
+      "title": "7",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-LifeOnLand_20260219_191635_ef032b2d.pdf",
+      "duration": "",
+      "order": 7
+    },
+    {
+      "id": "les_cosmic_1_8",
+      "moduleId": "mod_cosmic_1",
+      "title": "8",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-NoQuality_20260219_191635_52035383.pdf",
+      "duration": "",
+      "order": 8
+    },
+    {
+      "id": "les_cosmic_1_9",
+      "moduleId": "mod_cosmic_1",
+      "title": "9",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-QualityEducation_20260219_191635_5d28746f.pdf",
+      "duration": "",
+      "order": 9
+    },
+    {
+      "id": "les_cosmic_1_10",
+      "moduleId": "mod_cosmic_1",
+      "title": "10",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-SustainableCitiesAndCommunities_20260219_191635_44e8163a.pdf",
+      "duration": "",
+      "order": 10
+    },
+    {
+      "id": "les_cosmic_1_11",
+      "moduleId": "mod_cosmic_1",
+      "title": "11",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_90/module_130/CosmicScience-ZeroHunger_20260219_191635_3c469a7a.pdf",
+      "duration": "",
+      "order": 11
+    },
+    {
+      "id": "les_hb_1_1",
+      "moduleId": "mod_hibe_1",
+      "title": "1",
+      "type": "pdf",
+      "content": "https://www.rookieverse.net/uploads/course_83/module_114/HIBE_SURECI_20251029_120609_b645b3c1.pdf",
+      "duration": "",
       "order": 1
     },
     {
@@ -253,5 +283,6 @@
       "duration": "",
       "order": 1
     }
+    
   ]
 }

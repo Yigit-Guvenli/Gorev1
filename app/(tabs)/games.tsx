@@ -21,13 +21,15 @@ interface Game {
   route: string;
 }
 
-const CATEGORIES = ["Tümü", "Kelime", "Quiz", "Tahmin", "Hafıza"];
+const CATEGORIES = ["Tümü", "Kelime", "Quiz", "Tahmin", "Hafıza", "Şans", "Sosyal"];
 
 const GAMES: Game[] = [
   { id: "9", title: "FRC Tabu", desc: "Yasaklı kelimeleri kullanmadan anlat!", category: "Kelime", emoji: "🚫", route: "/(tabs)/games/tabu-game" },
   { id: "2", title: "Robotik Quiz", desc: "FIRST bilgini test et!", category: "Quiz", emoji: "❓", route: "/(tabs)/games/robotik-quiz" },
   { id: "5", title: "Hafıza Kartları", desc: "Kartları eşleştirerek hafızanı geliştir!", category: "Hafıza", emoji: "🧠", route: "/(tabs)/games/memory-game" },
   { id: "7", title: "Takım Tahmin", desc: "Takımı tahmin et!", category: "Tahmin", emoji: "🏆", route: "/(tabs)/games/team-guess" },
+  { id: "10", title: "Çarkı Çevir", desc: "Çarkı çevir, challenge veya ödül kazan!", category: "Şans", emoji: "🎰", route: "/(tabs)/games/spin-wheel" },
+  { id: "11", title: "Doğruluk mu Cesaret mi?", desc: "Ok döner, kime gelirse o oynuyor!", category: "Sosyal", emoji: "🎯", route: "/(tabs)/games/truth-or-dare" },
 ];
 
 const GameCard: React.FC<{ game: Game; index: number; onPress: () => void }> = ({ game, index, onPress }) => {
